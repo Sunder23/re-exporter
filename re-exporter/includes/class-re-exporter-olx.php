@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Exporter_OLX
  */
-class Exporter_OLX {
+class Exporter_OLX extends Abstract_Exporter {
 
 	/** @var Settings */
 	private $settings;
@@ -98,11 +98,6 @@ class Exporter_OLX {
 		}
 
 		// ── Generate one CSV per group ────────────────────────────────────────
-		$upload   = wp_upload_dir();
-		$base_url = trailingslashit( $upload['baseurl'] ) . 're-exporter/olx/';
-		// Derive timestamp from the output directory name.
-		$ts       = basename( $out_dir );
-
 		$files = array();
 
 		foreach ( $groups as $subcat_id => $posts ) {
@@ -129,9 +124,9 @@ class Exporter_OLX {
 				$rows[] = $this->build_row( $post, $headers, $merged_map, $value_map, $json_key_overrides );
 			}
 
-			$filename = sanitize_file_name( $subcat_id . '.csv' );
-			$filepath = trailingslashit( $out_dir ) . $filename;
-			$file_url = $base_url . $ts . '/' . rawurlencode( $filename );
+			$filename   = sanitize_file_name( $subcat_id . '.csv' );
+			$descriptor = $this->build_run_file_descriptor( 'olx', $out_dir, $filename, count( $posts ) );
+			$filepath   = $descriptor['filepath'];
 
 			$write = $this->write_csv( $filepath, $headers, $rows );
 			if ( is_wp_error( $write ) ) {
@@ -147,10 +142,10 @@ class Exporter_OLX {
 				: $subcat_id;
 
 			$files[] = array(
-				'filename'      => $filename,
-				'filepath'      => $filepath,
-				'url'           => $file_url,
-				'count'         => count( $posts ),
+				'filename'      => $descriptor['filename'],
+				'filepath'      => $descriptor['filepath'],
+				'url'           => $descriptor['url'],
+				'count'         => $descriptor['count'],
 				'category_name' => $cat_label,
 			);
 		}
@@ -399,37 +394,12 @@ class Exporter_OLX {
 		// Prepend UTF-8 BOM so Excel opens the file correctly.
 		$content = "\xEF\xBB\xBF" . $content;
 
-		return $this->fs_write( $filepath, $content );
-	}
-
-	/**
-	 * Write content to disk via WP_Filesystem.
-	 *
-	 * @param string $filepath
-	 * @param string $content
-	 * @return true|\WP_Error
-	 */
-	private function fs_write( $filepath, $content ) {
-		global $wp_filesystem;
-
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
-
-		$dir = dirname( $filepath );
-		if ( ! $wp_filesystem->is_dir( $dir ) ) {
-			wp_mkdir_p( $dir );
-		}
-
-		if ( ! $wp_filesystem->put_contents( $filepath, $content, FS_CHMOD_FILE ) ) {
-			return new \WP_Error(
-				'csv_write',
-				/* translators: %s = file path */
-				sprintf( __( 'Could not write file: %s', 're-exporter' ), $filepath )
-			);
-		}
-
-		return true;
+		return $this->write_file(
+			$filepath,
+			$content,
+			'csv_write',
+			/* translators: %s = file path */
+			__( 'Could not write file: %s', 're-exporter' )
+		);
 	}
 }

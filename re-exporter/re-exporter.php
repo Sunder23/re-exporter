@@ -34,7 +34,13 @@ require_once RE_EXPORTER_DIR . 'includes/class-re-olx-template.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-alo-template.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-field-scanner.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-field-resolver.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-abstract-exporter.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-global-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-olx-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-alo-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-imoti-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-realistimo-settings.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-olx-category-resolver.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-alo-category-resolver.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-export-request.php';
@@ -113,7 +119,7 @@ add_action( 'plugins_loaded', function () {
 	$gallery = new RE_Exporter\Gallery_Field( $settings );
 
 	// Metaboxes run on the front- and back-end edit screens.
-	new RE_Exporter\Metaboxes( $settings, $olx_template, $alo_template, $gallery );
+	new RE_Exporter\Metaboxes( $settings, $olx_template, $alo_template, $gallery, $olx_resolver, $alo_resolver );
 
 	// Admin page (includes Export_Wizard AJAX hooks) — admin-only.
 	if ( is_admin() ) {

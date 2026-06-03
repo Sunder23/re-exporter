@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Exporter_ALO
  */
-class Exporter_ALO {
+class Exporter_ALO extends Abstract_Exporter {
 
 	/** @var Settings */
 	private $settings;
@@ -110,10 +110,6 @@ class Exporter_ALO {
 		}
 
 		// ── Generate one JSON per group ───────────────────────────────────────
-		$upload   = wp_upload_dir();
-		$base_url = trailingslashit( $upload['baseurl'] ) . 're-exporter/alo/';
-		$ts       = basename( $out_dir );
-
 		$files      = array();
 		$all_output = array();
 
@@ -146,22 +142,22 @@ class Exporter_ALO {
 				return new \WP_Error( 'json_encode', __( 'Could not encode export data as JSON.', 're-exporter' ) );
 			}
 
-			$filename = sanitize_file_name( $subcat_id . '.json' );
-			$filepath = trailingslashit( $out_dir ) . $filename;
-			$file_url = $base_url . $ts . '/' . rawurlencode( $filename );
+			$filename   = sanitize_file_name( $subcat_id . '.json' );
+			$descriptor = $this->build_run_file_descriptor( 'alo', $out_dir, $filename, count( $posts ), $sub['name'] );
+			$filepath   = $descriptor['filepath'];
 
-			$write = $this->fs_write( $filepath, $json );
+			$write = $this->write_file(
+				$filepath,
+				$json,
+				'json_write',
+				/* translators: %s = file path */
+				__( 'Could not write file: %s', 're-exporter' )
+			);
 			if ( is_wp_error( $write ) ) {
 				return $write;
 			}
 
-			$files[] = array(
-				'filename'      => $filename,
-				'filepath'      => $filepath,
-				'url'           => $file_url,
-				'count'         => count( $posts ),
-				'category_name' => $sub['name'],
-			);
+			$files[] = $descriptor;
 
 			$all_output = array_merge( $all_output, $output );
 		}
@@ -177,17 +173,22 @@ class Exporter_ALO {
 		);
 
 		if ( false !== $all_json ) {
-			$all_filepath = trailingslashit( $out_dir ) . 'all.json';
-			$all_url      = $base_url . $ts . '/all.json';
-			$write        = $this->fs_write( $all_filepath, $all_json );
+			$all_descriptor = $this->build_run_file_descriptor(
+				'alo',
+				$out_dir,
+				'all.json',
+				count( $all_output ),
+				__( 'All categories (combined)', 're-exporter' )
+			);
+			$write          = $this->write_file(
+				$all_descriptor['filepath'],
+				$all_json,
+				'json_write',
+				/* translators: %s = file path */
+				__( 'Could not write file: %s', 're-exporter' )
+			);
 			if ( ! is_wp_error( $write ) ) {
-				$files[] = array(
-					'filename'      => 'all.json',
-					'filepath'      => $all_filepath,
-					'url'           => $all_url,
-					'count'         => count( $all_output ),
-					'category_name' => __( 'All categories (combined)', 're-exporter' ),
-				);
+				$files[] = $all_descriptor;
 			}
 		}
 
@@ -377,38 +378,4 @@ class Exporter_ALO {
 		return $obj;
 	}
 
-	// =========================================================================
-	// File Writing
-	// =========================================================================
-
-	/**
-	 * Write content to disk via WP_Filesystem.
-	 *
-	 * @param string $filepath
-	 * @param string $content
-	 * @return true|\WP_Error
-	 */
-	private function fs_write( $filepath, $content ) {
-		global $wp_filesystem;
-
-		if ( empty( $wp_filesystem ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
-
-		$dir = dirname( $filepath );
-		if ( ! $wp_filesystem->is_dir( $dir ) ) {
-			wp_mkdir_p( $dir );
-		}
-
-		if ( ! $wp_filesystem->put_contents( $filepath, $content, FS_CHMOD_FILE ) ) {
-			return new \WP_Error(
-				'json_write',
-				/* translators: %s = file path */
-				sprintf( __( 'Could not write file: %s', 're-exporter' ), $filepath )
-			);
-		}
-
-		return true;
-	}
 }

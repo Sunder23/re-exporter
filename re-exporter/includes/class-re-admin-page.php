@@ -129,31 +129,31 @@ class Admin_Page {
 
 			case 'save_global':
 				check_admin_referer( 're_exporter_save_global' );
-				$this->settings->save_global_settings( $_POST );
+				$this->settings->global_settings()->save( $_POST );
 				wp_safe_redirect( $this->settings_url( array( 'saved' => 'global' ) ) );
 				exit;
 
 			case 'save_olx':
 				check_admin_referer( 're_exporter_save_olx' );
-				$this->settings->save_olx_settings( $_POST );
+				$this->settings->olx()->save( $_POST );
 				wp_safe_redirect( $this->settings_url( array( 'sub' => 'olx', 'saved' => 'olx' ) ) );
 				exit;
 
 			case 'save_alo':
 				check_admin_referer( 're_exporter_save_alo' );
-				$this->settings->save_alo_settings( $_POST );
+				$this->settings->alo()->save( $_POST );
 				wp_safe_redirect( $this->settings_url( array( 'sub' => 'alo', 'saved' => 'alo' ) ) );
 				exit;
 
 			case 'save_imoti':
 				check_admin_referer( 're_exporter_save_imoti' );
-				$this->settings->save_imoti_settings( $_POST );
+				$this->settings->imoti()->save( $_POST );
 				wp_safe_redirect( $this->settings_url( array( 'sub' => 'imoti', 'saved' => 'imoti' ) ) );
 				exit;
 
 			case 'save_realistimo':
 				check_admin_referer( 're_exporter_save_realistimo' );
-				$this->settings->save_realistimo_settings( $_POST );
+				$this->settings->realistimo()->save( $_POST );
 				wp_safe_redirect( $this->settings_url( array( 'sub' => 'realistimo', 'saved' => 'realistimo' ) ) );
 				exit;
 
@@ -193,7 +193,7 @@ class Admin_Page {
 		$active_tab = $this->get_active_tab();
 
 		// Prepare shared data for templates.
-		$post_type    = $this->settings->get_post_type();
+		$post_type    = $this->settings->global_settings()->get_post_type();
 		$cpt_list     = $this->scanner->get_post_types();
 		$active_sub   = $this->get_active_sub();
 		$saved        = isset( $_GET['saved'] )   ? sanitize_key( wp_unslash( $_GET['saved'] ) )   : '';
@@ -298,43 +298,43 @@ class Admin_Page {
 			'grouped_subcats'    => $this->olx_template->get_grouped_subcategories(),
 			'base_subcats'       => $this->olx_template->get_base_subcategories(),
 			'all_subcats'        => $this->olx_template->get_all_subcategories(),
-			'olx_field_map'     => $this->settings->get_olx_field_map(),
-			'olx_value_map'      => $this->settings->get_olx_value_map(),
-			'olx_city_label_map' => $this->settings->get_olx_city_label_map(),
-			'olx_category_tax'   => $this->settings->get_olx_category_tax(),
-			'olx_category_map'       => $this->settings->get_olx_category_map(),
-			'olx_category_rent_map'  => $this->settings->get_olx_category_rent_map(),
-			'olx_required_map'       => $this->settings->get_olx_required_map(),
-			'olx_deal_field'    => $this->settings->get_olx_deal_type_field(),
-			'olx_deal_map'      => $this->settings->get_olx_deal_type_map(),
-			'alo_field_map'          => $this->settings->get_alo_field_map(),
-			'alo_value_map'          => $this->settings->get_alo_value_map(),
-			'alo_category_tax'       => $this->settings->get_alo_category_tax(),
-			'alo_category_map'       => $this->settings->get_alo_category_map(),
-			'alo_required_map'       => $this->settings->get_alo_required_map(),
+			'olx_field_map'     => $this->settings->olx()->get_field_map(),
+			'olx_value_map'      => $this->settings->olx()->get_value_map(),
+			'olx_city_label_map' => $this->settings->olx()->get_city_label_map(),
+			'olx_category_tax'   => $this->settings->olx()->get_category_tax(),
+			'olx_category_map'       => $this->settings->olx()->get_category_map(),
+			'olx_category_rent_map'  => $this->settings->olx()->get_category_rent_map(),
+			'olx_required_map'       => $this->settings->olx()->get_required_map(),
+			'olx_deal_field'    => $this->settings->olx()->get_deal_type_field(),
+			'olx_deal_map'      => $this->settings->olx()->get_deal_type_map(),
+			'alo_field_map'          => $this->settings->alo()->get_field_map(),
+			'alo_value_map'          => $this->settings->alo()->get_value_map(),
+			'alo_category_tax'       => $this->settings->alo()->get_category_tax(),
+			'alo_category_map'       => $this->settings->alo()->get_category_map(),
+			'alo_required_map'       => $this->settings->alo()->get_required_map(),
 			'alo_grouped_subcats'    => $this->alo_template->get_grouped_subcategories(),
 			'alo_all_subcats'        => $this->alo_template->get_all_subcategories(),
 			'alo_all_fields'         => $this->alo_template->get_all_fields(),
-			'alo_deal_field'         => $this->settings->get_alo_deal_type_field(),
-			'alo_deal_map'           => $this->settings->get_alo_deal_type_map(),
-			'alo_category_rent_map'      => $this->settings->get_alo_category_rent_map(),
-		'alo_location_label_map'     => $this->settings->get_alo_location_label_map(),
-		'alo_contacts'               => $this->settings->get_alo_contacts(),
-			'imoti_agency_id'            => $this->settings->get_imoti_agency_id(),
-			'imoti_agency_title'         => $this->settings->get_imoti_agency_title(),
-			'imoti_broker'               => $this->settings->get_imoti_broker(),
-			'imoti_field_map'            => $this->settings->get_imoti_field_map(),
-			'imoti_value_map'            => $this->settings->get_imoti_value_map(),
-			'imoti_category_tax'         => $this->settings->get_imoti_category_tax(),
-			'imoti_category_defaults'    => $this->settings->get_imoti_category_defaults(),
-			'imoti_location_label_map'   => $this->settings->get_imoti_location_label_map(),
-			'realistimo_agency'              => $this->settings->get_realistimo_agency(),
-			'realistimo_broker'              => $this->settings->get_realistimo_broker(),
-			'realistimo_field_map'           => $this->settings->get_realistimo_field_map(),
-			'realistimo_value_map'           => $this->settings->get_realistimo_value_map(),
-			'realistimo_location_label_map'  => $this->settings->get_realistimo_location_label_map(),
-			'realistimo_category_tax'        => $this->settings->get_realistimo_category_tax(),
-			'realistimo_category_defaults'   => $this->settings->get_realistimo_category_defaults(),
+			'alo_deal_field'         => $this->settings->alo()->get_deal_type_field(),
+			'alo_deal_map'           => $this->settings->alo()->get_deal_type_map(),
+			'alo_category_rent_map'      => $this->settings->alo()->get_category_rent_map(),
+		'alo_location_label_map'     => $this->settings->alo()->get_location_label_map(),
+		'alo_contacts'               => $this->settings->alo()->get_contacts(),
+			'imoti_agency_id'            => $this->settings->imoti()->get_agency_id(),
+			'imoti_agency_title'         => $this->settings->imoti()->get_agency_title(),
+			'imoti_broker'               => $this->settings->imoti()->get_broker(),
+			'imoti_field_map'            => $this->settings->imoti()->get_field_map(),
+			'imoti_value_map'            => $this->settings->imoti()->get_value_map(),
+			'imoti_category_tax'         => $this->settings->imoti()->get_category_tax(),
+			'imoti_category_defaults'    => $this->settings->imoti()->get_category_defaults(),
+			'imoti_location_label_map'   => $this->settings->imoti()->get_location_label_map(),
+			'realistimo_agency'              => $this->settings->realistimo()->get_agency(),
+			'realistimo_broker'              => $this->settings->realistimo()->get_broker(),
+			'realistimo_field_map'           => $this->settings->realistimo()->get_field_map(),
+			'realistimo_value_map'           => $this->settings->realistimo()->get_value_map(),
+			'realistimo_location_label_map'  => $this->settings->realistimo()->get_location_label_map(),
+			'realistimo_category_tax'        => $this->settings->realistimo()->get_category_tax(),
+			'realistimo_category_defaults'   => $this->settings->realistimo()->get_category_defaults(),
 		);
 	}
 

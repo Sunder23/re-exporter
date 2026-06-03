@@ -230,25 +230,37 @@ class Metaboxes
 	/** @var Gallery_Field */
 	private $gallery;
 
+	/** @var OLX_Category_Resolver */
+	private $olx_category_resolver;
+
+	/** @var ALO_Category_Resolver */
+	private $alo_category_resolver;
+
 	/** @var array|null */
 	private $locations_data = null;
 
 	/**
-	 * @param Settings      $settings
-	 * @param OLX_Template  $olx_template
-	 * @param ALO_Template  $alo_template
-	 * @param Gallery_Field $gallery
+	 * @param Settings              $settings
+	 * @param OLX_Template          $olx_template
+	 * @param ALO_Template          $alo_template
+	 * @param Gallery_Field         $gallery
+	 * @param OLX_Category_Resolver $olx_category_resolver
+	 * @param ALO_Category_Resolver $alo_category_resolver
 	 */
 	public function __construct(
 		Settings $settings,
 		OLX_Template $olx_template,
 		ALO_Template $alo_template,
-		Gallery_Field $gallery
+		Gallery_Field $gallery,
+		OLX_Category_Resolver $olx_category_resolver,
+		ALO_Category_Resolver $alo_category_resolver
 	) {
 		$this->settings = $settings;
 		$this->olx_template = $olx_template;
 		$this->alo_template = $alo_template;
 		$this->gallery = $gallery;
+		$this->olx_category_resolver = $olx_category_resolver;
+		$this->alo_category_resolver = $alo_category_resolver;
 
 		add_action('add_meta_boxes', array($this, 'register_meta_boxes'));
 		add_action('save_post', array($this, 'save_meta_boxes'), 10, 2);
@@ -508,7 +520,7 @@ class Metaboxes
 
 	private function render_tab_olx(\WP_Post $post)
 	{
-		$subcat_id = $this->resolve_olx_subcat($post);
+		$subcat_id = $this->olx_category_resolver->resolve_subcategory_id($post);
 
 		if (!$subcat_id) {
 			echo '<p class="description re-tab-empty">'
@@ -809,7 +821,7 @@ class Metaboxes
 
 	private function render_tab_alo(\WP_Post $post)
 	{
-		$subcat_id = $this->get_alo_subcat_id_for($post);
+		$subcat_id = $this->alo_category_resolver->resolve_subcategory_id($post);
 
 		// Location widget runs always if configured (regardless of subcat).
 		if ($this->has_alo_location_sources()) {
@@ -1776,7 +1788,7 @@ class Metaboxes
 			}
 
 			// ALO dropdown/checkbox fields.
-			$alo_subcat = $this->get_alo_subcat_id_for($post);
+			$alo_subcat = $this->alo_category_resolver->resolve_subcategory_id($post);
 			if ($alo_subcat) {
 				$alo_field_map = $this->alo_template->get_field_map($alo_subcat);
 				$alo_input = (isset($_POST['re_alo_fields']) && is_array($_POST['re_alo_fields']))

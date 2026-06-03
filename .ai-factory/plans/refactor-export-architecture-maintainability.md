@@ -63,17 +63,17 @@ Refactor the export architecture of the WordPress plugin incrementally so that p
   Logging requirements: log resolution failures only when they prevent export execution or indicate configuration corruption; keep normal empty-category skips silent unless they surface to the user.
 
 ### Phase 3: Split Platform Configuration and Shared Rules
-- [ ] Task 7: Decompose `Settings` into clearer platform-scoped responsibilities while preserving the existing option storage format.
+- [x] Task 7: Decompose `Settings` into clearer platform-scoped responsibilities while preserving the existing option storage format.
   Deliverable: the current monolithic settings class is broken up or wrapped so that global settings and each platform configuration schema have isolated read/write responsibility, without forcing a storage migration.
   Files: `re-exporter/includes/class-re-settings.php`; create platform-scoped settings helpers or repositories under `re-exporter/includes/`; update admin consumers incrementally.
   Logging requirements: log only invalid persisted configuration, save failures, or schema translation failures; do not emit logs for routine option reads/writes.
 
-- [ ] Task 8: Normalize exporter workflow so each platform module follows the same high-level contract even if output formats differ.
+- [x] Task 8: Normalize exporter workflow so each platform module follows the same high-level contract even if output formats differ.
   Deliverable: each exporter implements a consistent lifecycle such as collect config -> select/group posts -> build payload -> write output -> return result descriptors, reducing duplicated orchestration code.
   Files: `re-exporter/includes/class-re-exporter-olx.php`, `re-exporter/includes/class-re-exporter-alo.php`, `re-exporter/includes/class-re-exporter-imoti.php`, `re-exporter/includes/class-re-exporter-realistimo.php`, plus any new shared base helpers or strategy classes.
   Logging requirements: keep only failure-path logging for payload build errors, template lookup failures, and write failures; do not add row-by-row or item-by-item logs under minimal mode.
 
-- [ ] Task 9: Review metabox/admin integration points and align them with the new architecture boundaries without rewriting UI behavior.
+- [x] Task 9: Review metabox/admin integration points and align them with the new architecture boundaries without rewriting UI behavior.
   Deliverable: identify and fix remaining places where platform-specific admin/meta conventions bypass the new module boundaries, especially where export logic assumptions leak into admin classes.
   Files: `re-exporter/includes/class-re-metaboxes.php`, `re-exporter/includes/class-re-admin-page.php`, relevant `re-exporter/templates/admin/` files, and any touched shared service classes.
   Logging requirements: log only unexpected AJAX/admin boundary failures, invalid nonce/capability states already surfaced as errors, and architecture contract violations discovered during integration.

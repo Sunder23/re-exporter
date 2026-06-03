@@ -20,6 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Settings {
 
+	/** @var Global_Settings|null */
+	private $global_settings;
+
+	/** @var OLX_Settings|null */
+	private $olx_settings;
+
+	/** @var ALO_Settings|null */
+	private $alo_settings;
+
+	/** @var Imoti_Settings|null */
+	private $imoti_settings;
+
+	/** @var Realistimo_Settings|null */
+	private $realistimo_settings;
+
 	// ── Option key constants ──────────────────────────────────────────────────
 
 	const OPT_POST_TYPE        = 're_exporter_post_type';
@@ -81,6 +96,61 @@ class Settings {
 	const OPT_IMOTI_CATEGORY_TAX        = 're_exporter_imoti_category_tax';
 	const OPT_IMOTI_CATEGORY_DEFAULTS   = 're_exporter_imoti_category_defaults';
 	const OPT_IMOTI_LOCATION_LABEL_MAP  = 're_exporter_imoti_location_label_map';
+
+	/**
+	 * @return Global_Settings
+	 */
+	public function global_settings() {
+		if ( null === $this->global_settings ) {
+			$this->global_settings = new Global_Settings( $this );
+		}
+
+		return $this->global_settings;
+	}
+
+	/**
+	 * @return OLX_Settings
+	 */
+	public function olx() {
+		if ( null === $this->olx_settings ) {
+			$this->olx_settings = new OLX_Settings( $this );
+		}
+
+		return $this->olx_settings;
+	}
+
+	/**
+	 * @return ALO_Settings
+	 */
+	public function alo() {
+		if ( null === $this->alo_settings ) {
+			$this->alo_settings = new ALO_Settings( $this );
+		}
+
+		return $this->alo_settings;
+	}
+
+	/**
+	 * @return Imoti_Settings
+	 */
+	public function imoti() {
+		if ( null === $this->imoti_settings ) {
+			$this->imoti_settings = new Imoti_Settings( $this );
+		}
+
+		return $this->imoti_settings;
+	}
+
+	/**
+	 * @return Realistimo_Settings
+	 */
+	public function realistimo() {
+		if ( null === $this->realistimo_settings ) {
+			$this->realistimo_settings = new Realistimo_Settings( $this );
+		}
+
+		return $this->realistimo_settings;
+	}
 
 	// =========================================================================
 	// Global Settings

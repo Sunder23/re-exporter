@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) {
 /**
  * Class Exporter_Imoti
  */
-class Exporter_Imoti
+class Exporter_Imoti extends Abstract_Exporter
 {
 
 	/** @var Settings */
@@ -159,29 +159,22 @@ class Exporter_Imoti
 		}
 
 		// ── Write file (fixed path — overwritten on every export) ───────────
-		$upload   = wp_upload_dir();
-		$base_dir = trailingslashit($upload['basedir']) . 're-exporter/imoti';
-		$base_url = trailingslashit($upload['baseurl']) . 're-exporter/imoti';
-
 		$filename = 'feed.xml';
-		$filepath = trailingslashit($base_dir) . $filename;
-		$file_url = trailingslashit($base_url) . $filename;
+		$descriptor = $this->build_fixed_file_descriptor('imoti', $filename, $count, '', true);
+		$filepath = $descriptor['filepath'];
 
-		$write = $this->fs_write($filepath, $xml);
+		$write = $this->write_file(
+			$filepath,
+			$xml,
+			'xml_write',
+			/* translators: %s = file path */
+			__('Could not write file: %s', 're-exporter')
+		);
 		if (is_wp_error($write)) {
 			return $write;
 		}
 
-		return array(
-			array(
-				'filename'  => $filename,
-				'filepath'  => $filepath,
-				'url'       => $file_url,
-				'count'     => $count,
-				'category_name' => '',
-				'link_only' => true,
-			),
-		);
+		return array( $descriptor );
 	}
 
 	// =========================================================================
@@ -554,39 +547,4 @@ class Exporter_Imoti
 		$parent->appendChild($el);
 	}
 
-	// =========================================================================
-	// File Writing
-	// =========================================================================
-
-	/**
-	 * Write content to disk via WP_Filesystem.
-	 *
-	 * @param string $filepath
-	 * @param string $content
-	 * @return true|\WP_Error
-	 */
-	private function fs_write($filepath, $content)
-	{
-		global $wp_filesystem;
-
-		if (empty($wp_filesystem)) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-			WP_Filesystem();
-		}
-
-		$dir = dirname($filepath);
-		if (!$wp_filesystem->is_dir($dir)) {
-			wp_mkdir_p($dir);
-		}
-
-		if (!$wp_filesystem->put_contents($filepath, $content, FS_CHMOD_FILE)) {
-			return new \WP_Error(
-				'xml_write',
-				/* translators: %s = file path */
-				sprintf(__('Could not write file: %s', 're-exporter'), $filepath)
-			);
-		}
-
-		return true;
-	}
 }
