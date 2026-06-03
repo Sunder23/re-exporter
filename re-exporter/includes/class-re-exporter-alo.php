@@ -40,8 +40,8 @@ class Exporter_ALO {
 	/** @var Field_Resolver */
 	private $resolver;
 
-	/** @var Export_Wizard */
-	private $wizard;
+	/** @var ALO_Category_Resolver */
+	private $category_resolver;
 
 	/**
 	 * Multi-value (array) field keys per the ALO spec.
@@ -57,15 +57,15 @@ class Exporter_ALO {
 	);
 
 	/**
-	 * @param Settings      $settings
-	 * @param ALO_Template  $alo_template
-	 * @param Export_Wizard $wizard  Already-instantiated wizard (avoids re-registering AJAX hooks).
+	 * @param Settings              $settings
+	 * @param ALO_Template          $alo_template
+	 * @param ALO_Category_Resolver $category_resolver
 	 */
-	public function __construct( Settings $settings, ALO_Template $alo_template, Export_Wizard $wizard ) {
-		$this->settings     = $settings;
-		$this->alo_template = $alo_template;
-		$this->resolver     = new Field_Resolver();
-		$this->wizard       = $wizard;
+	public function __construct( Settings $settings, ALO_Template $alo_template, ALO_Category_Resolver $category_resolver ) {
+		$this->settings          = $settings;
+		$this->alo_template      = $alo_template;
+		$this->resolver          = new Field_Resolver();
+		$this->category_resolver = $category_resolver;
 	}
 
 	// =========================================================================
@@ -81,8 +81,6 @@ class Exporter_ALO {
 	 *                            [ 'filename', 'filepath', 'url', 'count' ]
 	 */
 	public function generate( array $post_ids, $out_dir ) {
-		$category_tax = $this->settings->get_alo_category_tax();
-		$category_map = $this->settings->get_alo_category_map();
 		$field_map    = $this->settings->get_alo_field_map();
 		$value_map    = $this->settings->get_alo_value_map();
 		$req_map      = $this->settings->get_alo_required_map();
@@ -96,7 +94,7 @@ class Exporter_ALO {
 				continue;
 			}
 
-			$subcat_id = $this->wizard->resolve_alo_subcat_id( $post, $category_tax, $category_map );
+			$subcat_id = $this->category_resolver->resolve_subcategory_id( $post );
 			if ( ! $subcat_id ) {
 				continue; // Skip posts without a category assignment.
 			}

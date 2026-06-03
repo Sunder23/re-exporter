@@ -34,8 +34,8 @@ class Exporter_OLX {
 	/** @var Field_Resolver */
 	private $resolver;
 
-	/** @var Export_Wizard */
-	private $wizard;
+	/** @var OLX_Category_Resolver */
+	private $category_resolver;
 
 	/**
 	 * Per-run in-memory cache: city name (lowercased) → OLX city ID.
@@ -45,16 +45,15 @@ class Exporter_OLX {
 	private $city_id_cache = array();
 
 	/**
-	 * @param Settings      $settings
-	 * @param OLX_Template  $olx_template
-	 * @param Export_Wizard $wizard  The already-instantiated wizard (avoids
-	 *                               re-registering its AJAX hooks).
+	 * @param Settings              $settings
+	 * @param OLX_Template          $olx_template
+	 * @param OLX_Category_Resolver $category_resolver
 	 */
-	public function __construct( Settings $settings, OLX_Template $olx_template, Export_Wizard $wizard ) {
-		$this->settings     = $settings;
-		$this->olx_template = $olx_template;
-		$this->resolver     = new Field_Resolver();
-		$this->wizard       = $wizard;
+	public function __construct( Settings $settings, OLX_Template $olx_template, OLX_Category_Resolver $category_resolver ) {
+		$this->settings          = $settings;
+		$this->olx_template      = $olx_template;
+		$this->resolver          = new Field_Resolver();
+		$this->category_resolver = $category_resolver;
 	}
 
 	// =========================================================================
@@ -70,8 +69,6 @@ class Exporter_OLX {
 	 *                            [ 'filename', 'filepath', 'url', 'count' ]
 	 */
 	public function generate( array $post_ids, $out_dir ) {
-		$category_tax = $this->settings->get_olx_category_tax();
-		$category_map = $this->settings->get_olx_category_map();
 		$field_map    = $this->settings->get_olx_field_map();
 		$value_map    = $this->settings->get_olx_value_map();
 		$req_map      = $this->settings->get_olx_required_map();
@@ -85,7 +82,7 @@ class Exporter_OLX {
 				continue;
 			}
 
-			$subcat_id = $this->wizard->resolve_subcat_id( $post, $category_tax, $category_map );
+			$subcat_id = $this->category_resolver->resolve_subcategory_id( $post );
 			if ( ! $subcat_id ) {
 				continue; // Skip posts without a category assignment.
 			}

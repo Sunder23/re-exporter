@@ -39,6 +39,9 @@ class Admin_Page {
 	/** @var Platform_Registry */
 	private $platform_registry;
 
+	/** @var OLX_Category_Resolver */
+	private $olx_category_resolver;
+
 	/** @var Export_Wizard */
 	private $wizard;
 
@@ -47,21 +50,28 @@ class Admin_Page {
 	 * @param OLX_Template  $olx_template
 	 * @param ALO_Template  $alo_template
 	 * @param Field_Scanner    $scanner
-	 * @param Platform_Registry $platform_registry
+	 * @param Platform_Registry    $platform_registry
+	 * @param OLX_Category_Resolver $olx_category_resolver
+	 * @param Export_Run_Service    $run_service
+	 * @param Export_Review_Service $review_service
 	 */
 	public function __construct(
 		Settings $settings,
 		OLX_Template $olx_template,
 		ALO_Template $alo_template,
 		Field_Scanner $scanner,
-		Platform_Registry $platform_registry
+		Platform_Registry $platform_registry,
+		OLX_Category_Resolver $olx_category_resolver,
+		Export_Run_Service $run_service,
+		Export_Review_Service $review_service
 	) {
-		$this->settings          = $settings;
-		$this->olx_template      = $olx_template;
-		$this->alo_template      = $alo_template;
-		$this->scanner           = $scanner;
-		$this->platform_registry = $platform_registry;
-		$this->wizard            = new Export_Wizard( $settings, $olx_template, $alo_template, $platform_registry );
+		$this->settings              = $settings;
+		$this->olx_template          = $olx_template;
+		$this->alo_template          = $alo_template;
+		$this->scanner               = $scanner;
+		$this->platform_registry     = $platform_registry;
+		$this->olx_category_resolver = $olx_category_resolver;
+		$this->wizard                = new Export_Wizard( $settings, $platform_registry, $olx_category_resolver, $run_service, $review_service );
 
 		add_action( 'admin_menu',            array( $this, 'register_menu' ) );
 		add_action( 'admin_init',            array( $this, 'handle_form_saves' ) );

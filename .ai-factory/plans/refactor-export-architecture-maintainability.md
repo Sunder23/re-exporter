@@ -47,17 +47,17 @@ Refactor the export architecture of the WordPress plugin incrementally so that p
   Logging requirements: log only unknown platform lookup or handler resolution failures at ERROR level; avoid info-level noise for normal successful dispatch.
 
 ### Phase 2: Thin the Orchestration Layer
-- [ ] Task 4: Extract export run orchestration from `Export_Wizard` into a dedicated service.
+- [x] Task 4: Extract export run orchestration from `Export_Wizard` into a dedicated service.
   Deliverable: a service responsible for taking selected post IDs plus platform code and returning generated file descriptors, with `Export_Wizard` reduced to request validation and JSON response formatting.
   Files: `re-exporter/includes/class-re-export-wizard.php`; create a new orchestration service under `re-exporter/includes/`; update bootstrap wiring in `re-exporter/re-exporter.php`.
   Logging requirements: minimal logging at service entry, platform dispatch failure, filesystem/export failure, and final failure response path; no per-post success spam.
 
-- [ ] Task 5: Extract review/preflight logic from `Export_Wizard` into a dedicated review service.
+- [x] Task 5: Extract review/preflight logic from `Export_Wizard` into a dedicated review service.
   Deliverable: category grouping, required-field checks, and review summary preparation move behind a service that can be reused by multiple platforms and kept out of the AJAX controller.
   Files: `re-exporter/includes/class-re-export-wizard.php`; create one or more review/preflight classes under `re-exporter/includes/`.
   Logging requirements: log only invalid input, review-generation failure, and impossible platform/configuration states; avoid logging each reviewed post under minimal mode.
 
-- [ ] Task 6: Remove exporter dependence on wizard internals by moving category resolution and similar shared logic into dedicated collaborators.
+- [x] Task 6: Remove exporter dependence on wizard internals by moving category resolution and similar shared logic into dedicated collaborators.
   Deliverable: exporters no longer call methods like `resolve_subcat_id()` on the wizard; instead they depend on explicit collaborators or platform services.
   Files: `re-exporter/includes/class-re-exporter-olx.php`, `re-exporter/includes/class-re-exporter-alo.php`, `re-exporter/includes/class-re-export-wizard.php`; create shared resolution helpers under `re-exporter/includes/`.
   Logging requirements: log resolution failures only when they prevent export execution or indicate configuration corruption; keep normal empty-category skips silent unless they surface to the user.

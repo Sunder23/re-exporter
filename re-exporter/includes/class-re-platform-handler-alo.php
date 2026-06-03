@@ -22,13 +22,18 @@ class Platform_Handler_ALO implements Platform_Handler_Interface {
 	/** @var ALO_Template */
 	private $template;
 
+	/** @var ALO_Category_Resolver */
+	private $category_resolver;
+
 	/**
-	 * @param Settings     $settings
-	 * @param ALO_Template $template
+	 * @param Settings              $settings
+	 * @param ALO_Template          $template
+	 * @param ALO_Category_Resolver $category_resolver
 	 */
-	public function __construct( Settings $settings, ALO_Template $template ) {
-		$this->settings = $settings;
-		$this->template = $template;
+	public function __construct( Settings $settings, ALO_Template $template, ALO_Category_Resolver $category_resolver ) {
+		$this->settings          = $settings;
+		$this->template          = $template;
+		$this->category_resolver = $category_resolver;
 	}
 
 	/**
@@ -43,12 +48,7 @@ class Platform_Handler_ALO implements Platform_Handler_Interface {
 	 * @return Export_Result|\WP_Error
 	 */
 	public function export( Export_Request $request ) {
-		$wizard = $request->get_context( 'wizard' );
-		if ( ! $wizard instanceof Export_Wizard ) {
-			return new \WP_Error( 'missing_wizard', __( 'Export runtime is incomplete for ALO.', 're-exporter' ) );
-		}
-
-		$exporter = new Exporter_ALO( $this->settings, $this->template, $wizard );
+		$exporter = new Exporter_ALO( $this->settings, $this->template, $this->category_resolver );
 		$result   = $exporter->generate( $request->get_post_ids(), $request->get_output_directory() );
 
 		return is_wp_error( $result ) ? $result : Export_Result::from_legacy_files( $result );

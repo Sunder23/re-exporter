@@ -26,26 +26,31 @@ class Export_Wizard {
 	/** @var Settings */
 	private $settings;
 
-	/** @var OLX_Template */
-	private $olx_template;
-
-	/** @var ALO_Template */
-	private $alo_template;
-
 	/** @var Platform_Registry */
 	private $platform_registry;
 
+	/** @var OLX_Category_Resolver */
+	private $olx_category_resolver;
+
+	/** @var Export_Run_Service */
+	private $run_service;
+
+	/** @var Export_Review_Service */
+	private $review_service;
+
 	/**
-	 * @param Settings          $settings
-	 * @param OLX_Template      $olx_template
-	 * @param ALO_Template      $alo_template
-	 * @param Platform_Registry $platform_registry
+	 * @param Settings              $settings
+	 * @param Platform_Registry     $platform_registry
+	 * @param OLX_Category_Resolver $olx_category_resolver
+	 * @param Export_Run_Service    $run_service
+	 * @param Export_Review_Service $review_service
 	 */
-	public function __construct( Settings $settings, OLX_Template $olx_template, ALO_Template $alo_template, Platform_Registry $platform_registry ) {
-		$this->settings          = $settings;
-		$this->olx_template      = $olx_template;
-		$this->alo_template      = $alo_template;
-		$this->platform_registry = $platform_registry;
+	public function __construct( Settings $settings, Platform_Registry $platform_registry, OLX_Category_Resolver $olx_category_resolver, Export_Run_Service $run_service, Export_Review_Service $review_service ) {
+		$this->settings              = $settings;
+		$this->platform_registry     = $platform_registry;
+		$this->olx_category_resolver = $olx_category_resolver;
+		$this->run_service           = $run_service;
+		$this->review_service        = $review_service;
 
 		add_action( 'wp_ajax_re_exp_load_posts', array( $this, 'ajax_load_posts' ) );
 		add_action( 'wp_ajax_re_exp_review',     array( $this, 'ajax_review' ) );
@@ -164,7 +169,7 @@ class Export_Wizard {
 			</thead>
 			<tbody>
 			<?php foreach ( $posts as $post ) :
-				$olx_cat = $this->resolve_display_category( $post, $category_tax, $category_map );
+				$olx_cat = $this->olx_category_resolver->get_display_category( $post );
 				$missing = ! $olx_cat;
 				?>
 				<tr<?php echo $missing ? ' class="re-row-warning"' : ''; ?>>
@@ -252,19 +257,7 @@ class Export_Wizard {
 			wp_send_json_error( __( 'No posts found matching the current export filters.', 're-exporter' ) );
 		}
 
-		ob_start();
-
-		if ( 'olx' === $platform ) {
-			$this->render_olx_review( $post_ids );
-		} elseif ( 'alo' === $platform ) {
-			$this->render_alo_review( $post_ids );
-		} elseif ( 'realistimo' === $platform ) {
-			$this->render_realistimo_review( $post_ids );
-		} else {
-			$this->render_imoti_review( $post_ids );
-		}
-
-		$html = ob_get_clean();
+		$html = $this->review_service->render( $platform, $post_ids );
 
 		wp_send_json_success( array( 'html' => $html, 'count' => count( $post_ids ) ) );
 	}
@@ -575,40 +568,9 @@ class Export_Wizard {
 			wp_send_json_error( __( 'No posts found matching the current export filters.', 're-exporter' ) );
 		}
 
-		$handler = $this->platform_registry->get_handler( $platform );
-		if ( ! $handler ) {
-			wp_send_json_error( __( 'Export platform could not be resolved.', 're-exporter' ) );
-		}
-
-		$upload    = wp_upload_dir();
-		$base_dir  = trailingslashit( $upload['basedir'] ) . 're-exporter/' . $platform;
-		$timestamp = gmdate( 'Y-m-d_H-i-s' );
-		$out_dir   = trailingslashit( $base_dir ) . $timestamp;
-		$request   = new Export_Request(
-			$platform,
-			$post_ids,
-			$out_dir,
-			array( 'wizard' => $this )
-		);
-		$result    = $handler->export( $request );
-
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( $result->get_error_message() );
-		}
-
-		$files = $result->to_legacy_files();
-
-		// Log each file.
-		$post_type = $this->settings->get_post_type();
-		foreach ( $files as $file ) {
-			Export_Logger::log( array(
-				'platform'     => $platform,
-				'post_type'    => $post_type,
-				'record_count' => isset( $file['count'] ) ? $file['count'] : count( $post_ids ),
-				'filename'     => $file['filename'],
-				'file_path'    => isset( $file['filepath'] ) ? $file['filepath'] : '',
-				'user_id'      => get_current_user_id(),
-			) );
+		$files = $this->run_service->run( $platform, $post_ids );
+		if ( is_wp_error( $files ) ) {
+			wp_send_json_error( $files->get_error_message() );
 		}
 
 		ob_start();
