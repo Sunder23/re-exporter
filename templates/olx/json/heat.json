@@ -1,0 +1,68 @@
+{
+    "data": {
+        "myAds": {
+            "categoryField": {
+                "__typename": "MyAdsSelectableCategoryField",
+                "values": {
+                    "totalCount": 9,
+                    "items": [
+                        {
+                            "label": "ТЕЦ",
+                            "sublabel": null,
+                            "value": "tec",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Локално",
+                            "sublabel": null,
+                            "value": "local",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Електричество",
+                            "sublabel": null,
+                            "value": "electricity",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Газ",
+                            "sublabel": null,
+                            "value": "gaz",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Печка, камина",
+                            "sublabel": null,
+                            "value": "fireplace",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Соларни панели",
+                            "sublabel": null,
+                            "value": "solar",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Термопомпа",
+                            "sublabel": null,
+                            "value": "thermopump",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Прокарва се",
+                            "sublabel": null,
+                            "value": "tobe",
+                            "parentValue": ""
+                        },
+                        {
+                            "label": "Без отопление",
+                            "sublabel": null,
+                            "value": "no",
+                            "parentValue": ""
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "_comment": "Имоти - Продажби » Парцели за застрояване, Инвестиционни проекти",
+    "out_id": "STATIC_UNIQUE_ID",
+    "subcat_id": "526",
+    "region_name": "REGION_NAME",
+    "location_name": "LOCATION_NAME",
+    "section_name": "SECTION_NAME",
+    "section_string": "SECTION_STRING",
+    "map": {
+        "lat": "DECIMAL_LATITUDE",
+        "long": "DECIMAL_LONGITUTE"
+    },
+    "price": "DECIMAL_PRICE",
+    "currency": "BGN/EUR",
+    "images": [
+        "IMAGE_OR_VIDEO_URL_1",
+        "IMAGE_OR_VIDEO_URL_2",
+        "....",
+        "IMAGE_OR_VIDEO_URL_15"
+    ],
+    "name": "NAME",
+    "name_en": "NAME_EN",
+    "name_ru": "NAME_RU",
+    "desc": "DESCRIPTION",
+    "desc_en": "DESCRIPTION_EN",
+    "desc_ru": "DESCRIPTION_RU",
+    "deal_type": "FROM_LIST",
+    "area": "DECIMAL",
+    "regulation": "FROM_LIST",
+    "has_current": "FROM_LIST",
+    "has_water": "FROM_LIST",
+    "has_project": "FROM_LIST",
+    "features": [
+        "OPTION_1",
+        "OPTION_2",
+        "...."
+    ],
+    "contacts": {
+        "hide_name": "TRUE/FALSE",
+        "hide_location": "TRUE/FALSE",
+        "hide_address": "TRUE/FALSE",
+        "hide_website": "TRUE/FALSE",
+        "phones": [
+            "VALID_PHONE1",
+            "VALID_PHONE2",
+            "VALID_PHONE3",
+            "VALID_PHONE4",
+            "VALID_PHONE5"
+        ],
+        "email": "valid@email.tld"
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "_comment": "Имоти - Продажби » Хотели, Мотели",
+    "out_id": "STATIC_UNIQUE_ID",
+    "subcat_id": "522",
+    "region_name": "REGION_NAME",
+    "location_name": "LOCATION_NAME",
+    "section_name": "SECTION_NAME",
+    "section_string": "SECTION_STRING",
+    "map": {
+        "lat": "DECIMAL_LATITUDE",
+        "long": "DECIMAL_LONGITUTE"
+    },
+    "price": "DECIMAL_PRICE",
+    "currency": "BGN/EUR",
+    "images": [
+        "IMAGE_OR_VIDEO_URL_1",
+        "IMAGE_OR_VIDEO_URL_2"
+    ],
+    "name": "NAME",
+    "name_en": "NAME_EN",
+    "name_ru": "NAME_RU",
+    "desc": "DESCRIPTION",
+    "desc_en": "DESCRIPTION_EN",
+    "desc_ru": "DESCRIPTION_RU",
+    "type": "FROM_LIST",
+    "area": "DECIMAL",
+    "hotel_category": "FROM_LIST",
+    "beds_number": "DECIMAL",
+    "construction_stage": "FROM_LIST",
+    "construction_type": "FROM_LIST",
+    "features": [
+        "OPTION_1",
+        "OPTION_2"
+    ],
+    "contacts": {
+        "hide_name": "TRUE/FALSE",
+        "hide_location": "TRUE/FALSE",
+        "hide_address": "TRUE/FALSE",
+        "hide_website": "TRUE/FALSE",
+        "phones": [
+            "VALID_PHONE1",
+            "VALID_PHONE2"
+        ],
+        "email": "valid@email.tld"
+    }
+}

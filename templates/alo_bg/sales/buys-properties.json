@@ -1,0 +1,30 @@
+{
+    "_comment": "Имоти - Продажби » Купува имоти",
+    "out_id": "STATIC_UNIQUE_ID",
+    "subcat_id": "556",
+    "region_name": "REGION_NAME",
+    "location_name": "LOCATION_NAME",
+    "price": "DECIMAL_PRICE",
+    "currency": "BGN/EUR",
+    "images": [
+        "IMAGE_OR_VIDEO_URL_1",
+        "IMAGE_OR_VIDEO_URL_2"
+    ],
+    "name": "NAME",
+    "name_en": "NAME_EN",
+    "name_ru": "NAME_RU",
+    "desc": "DESCRIPTION",
+    "desc_en": "DESCRIPTION_EN",
+    "desc_ru": "DESCRIPTION_RU",
+    "contacts": {
+        "hide_name": "TRUE/FALSE",
+        "hide_location": "TRUE/FALSE",
+        "hide_address": "TRUE/FALSE",
+        "hide_website": "TRUE/FALSE",
+        "phones": [
+            "VALID_PHONE1",
+            "VALID_PHONE2"
+        ],
+        "email": "valid@email.tld"
+    }
+}

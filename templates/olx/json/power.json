@@ -1,0 +1,1 @@
+{"data":{"myAds":{"categoryField":{"__typename":"MyAdsSelectableCategoryField","values":{"totalCount":2,"items":[{"label":"С ток","sublabel":null,"value":"yes","parentValue":""},{"label":"Без ток","sublabel":null,"value":"no","parentValue":""}]}}}}}

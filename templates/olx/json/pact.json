@@ -1,0 +1,1 @@
+{"data":{"myAds":{"categoryField":{"__typename":"MyAdsSelectableCategoryField","values":{"totalCount":2,"items":[{"label":"С аренден договор","sublabel":null,"value":"yes","parentValue":""},{"label":"Без аренден договор","sublabel":null,"value":"no","parentValue":""}]}}}}}

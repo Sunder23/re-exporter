@@ -1,0 +1,1 @@
+{"data":{"myAds":{"categoryField":{"__typename":"MyAdsSelectableCategoryField","values":{"totalCount":3,"items":[{"label":"Обзаведен","sublabel":null,"value":"obzaveden","parentValue":""},{"label":"Полуобзаведен","sublabel":null,"value":"poluobzaveden","parentValue":""},{"label":"Необзаведен","sublabel":null,"value":"neobzaveden","parentValue":""}]}}}}}

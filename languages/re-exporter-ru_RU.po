@@ -1,0 +1,354 @@
+# Russian translation for RE Exporter plugin
+# Copyright (C) 2026 FreedomVarna
+msgid ""
+msgstr ""
+"Project-Id-Version: RE Exporter 2.0.0\n"
+"PO-Revision-Date: 2026-03-24\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Domain: re-exporter\n"
+
+msgid "Real Estate Exporter"
+msgstr "Экспортёр недвижимости"
+
+msgid "RE Exporter"
+msgstr "RE Exporter"
+
+msgid "RE Exporter — Export Settings"
+msgstr "RE Exporter — Настройки экспорта"
+
+msgid "RE Exporter — OLX Category"
+msgstr "RE Exporter — Категория OLX"
+
+msgid "RE Exporter — OLX Field Values"
+msgstr "RE Exporter — Значения полей OLX"
+
+msgid "Export on board"
+msgstr "Экспортировать"
+
+msgid "Uncheck to exclude this post from all exports."
+msgstr "Снимите флажок, чтобы исключить это объявление из всех экспортов."
+
+msgid "OLX Category"
+msgstr "Категория OLX"
+
+msgid "— Select category —"
+msgstr "— Выберите категорию —"
+
+msgid "Used for OLX CSV export when no taxonomy is configured."
+msgstr "Используется для CSV-экспорта OLX, если таксономия не настроена."
+
+msgid "No JSON-backed fields are mapped for this post's OLX category."
+msgstr "Для категории OLX этого объявления не настроены поля."
+
+msgid "— Not set —"
+msgstr "— Не задано —"
+
+msgid "Type to search city…"
+msgstr "Введите для поиска города…"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "No results"
+msgstr "Нет результатов"
+
+msgid "— Keep original —"
+msgstr "— Оставить как есть —"
+
+msgid "You do not have permission to access this page."
+msgstr "У вас нет прав для доступа к этой странице."
+
+msgid "Please select at least one record."
+msgstr "Пожалуйста, выберите хотя бы одну запись."
+
+msgid "Please select a platform."
+msgstr "Пожалуйста, выберите платформу."
+
+msgid "An error occurred. Please try again."
+msgstr "Произошла ошибка. Пожалуйста, попробуйте ещё раз."
+
+msgid "Generating export…"
+msgstr "Формирование экспорта…"
+
+msgid "Building review…"
+msgstr "Создание обзора…"
+
+msgid "required field(s) are not mapped. Continue anyway?"
+msgstr "обязательных поля не заданы. Продолжить?"
+
+msgid "of"
+msgstr "из"
+
+msgid "selected"
+msgstr "выбрано"
+
+msgid "Global Settings"
+msgstr "Общие настройки"
+
+msgid "Post Type"
+msgstr "Тип записи"
+
+msgid "— Select post type —"
+msgstr "— Выберите тип записи —"
+
+msgid "published"
+msgstr "опубликовано"
+
+msgid "The CPT that will be exported. Changing this reloads all field-mapping sections below."
+msgstr "Тип записи для экспорта. При изменении все разделы маппинга перезагружаются."
+
+msgid "Country"
+msgstr "Страна"
+
+msgid "OLX country portal used for city autocomplete."
+msgstr "Портал OLX для автозаполнения городов."
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "Export only published posts"
+msgstr "Экспортировать только опубликованные записи"
+
+msgid "Respect per-post &quot;Export on board&quot; flag"
+msgstr "Учитывать флажок &laquo;Экспортировать&raquo; для каждого объявления"
+
+msgid "Save Settings"
+msgstr "Сохранить настройки"
+
+msgid "Please select and save a Post Type above to configure the platform settings below."
+msgstr "Выберите и сохраните тип записи выше, чтобы настроить параметры платформы ниже."
+
+msgid "B1 — Field Mapping"
+msgstr "B1 — Маппинг полей"
+
+msgid "Map each OLX CSV column to a WordPress source field. All columns from all OLX template files are listed here."
+msgstr "Сопоставьте каждый столбец CSV OLX с полем WordPress."
+
+msgid "OLX CSV column"
+msgstr "Столбец CSV OLX"
+
+msgid "WordPress source"
+msgstr "Источник WordPress"
+
+msgid "common"
+msgstr "общее"
+
+msgid "values"
+msgstr "значения"
+
+msgid "— Skip —"
+msgstr "— Пропустить —"
+
+msgid "Commonly required — not yet mapped."
+msgstr "Обычно обязательное — ещё не задано."
+
+msgid "B2 — Value Overrides"
+msgstr "B2 — Замена значений"
+
+msgid "Map WordPress field values to OLX-accepted values for fields with a controlled vocabulary."
+msgstr "Сопоставьте значения полей WordPress с допустимыми значениями OLX."
+
+msgid "B3 — Category Mapping"
+msgstr "B3 — Маппинг категорий"
+
+msgid "Category taxonomy"
+msgstr "Таксономия категорий"
+
+msgid "— None (use per-post metabox) —"
+msgstr "— Нет (метабокс для каждой записи) —"
+
+msgid "Which taxonomy term determines the OLX category. The deal type (sale/rent) is configured separately in B5."
+msgstr "Термин таксономии, определяющий категорию OLX. Тип сделки настраивается в B5."
+
+msgid "Which taxonomy term determines the OLX category. The deal type (sale/rent) is routed via B5."
+msgstr "Термин таксономии, определяющий категорию OLX. Маршрутизация типа сделки настраивается в B5."
+
+msgid "No taxonomy found for this post type. OLX category is assigned per-post via the \"RE Exporter — OLX Category\" metabox on each post edit screen."
+msgstr "Для этого типа записи таксономия не найдена. Категория OLX назначается через метабокс на каждом экране редактирования."
+
+msgid "OLX category (Sale / Primary)"
+msgstr "Категория OLX (Продажа / Основная)"
+
+msgid "OLX category (Rent — optional, for B5 routing)"
+msgstr "Категория OLX (Аренда — опционально, для маршрутизации B5)"
+
+msgid "WordPress term"
+msgstr "Термин WordPress"
+
+msgid "Used when a term has both a Sale and Rent OLX category configured in B3. Select the WordPress field that determines the deal type."
+msgstr "Используется, если у термина настроены обе категории (Продажа и Аренда) в B3. Выберите поле WordPress, определяющее тип сделки."
+
+msgid "B4 — Required Fields per Category"
+msgstr "B4 — Обязательные поля по категориям"
+
+msgid "Fields already mapped in B1 are shown as ✅. Unmapped required fields need a source assigned here."
+msgstr "Поля, заданные в B1, отображаются как ✅. Незаданные обязательные поля требуют источника здесь."
+
+msgid "Required field"
+msgstr "Обязательное поле"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "\"%1$s\" uses %2$s.json for value overrides in this category."
+msgstr "\"%1$s\" использует %2$s.json для замены значений в этой категории."
+
+msgid "Mapped in B1 to: %s"
+msgstr "Задано в B1: %s"
+
+msgid "Required — not yet mapped"
+msgstr "Обязательное — ещё не задано"
+
+msgid "B5 — Deal Type Routing (Sales / Rent)"
+msgstr "B5 — Маршрутизация типа сделки (Продажа / Аренда)"
+
+msgid "Used when a term is mapped to a base category without a _sale/_rent suffix. Select the WordPress field that determines the deal type."
+msgstr "Используется когда термин сопоставлен с базовой категорией без суффикса _sale/_rent."
+
+msgid "No posts found matching the current export filters."
+msgstr "Не найдено записей, соответствующих текущим фильтрам экспорта."
+
+msgid "Step 1 — Select Platform"
+msgstr "Шаг 1 — Выбор платформы"
+
+msgid "Step 2 — Review &amp; Confirm"
+msgstr "Шаг 2 — Проверка и подтверждение"
+
+msgid "Step 3 — Download"
+msgstr "Шаг 3 — Скачать"
+
+msgid "Platform"
+msgstr "Платформа"
+
+msgid "Review"
+msgstr "Проверка"
+
+msgid "Done"
+msgstr "Готово"
+
+msgid "Include in RE export"
+msgstr "Включить в экспорт"
+
+msgid "Deal type field"
+msgstr "Поле типа сделки"
+
+msgid "— Not configured —"
+msgstr "— Не настроено —"
+
+msgid "— Always Sales —"
+msgstr "— Всегда продажа —"
+
+msgid "— Always Rent —"
+msgstr "— Всегда аренда —"
+
+msgid "WordPress value"
+msgstr "Значение WordPress"
+
+msgid "Direction"
+msgstr "Направление"
+
+msgid "Sales"
+msgstr "Продажа"
+
+msgid "Rent"
+msgstr "Аренда"
+
+msgid "Save OLX Settings"
+msgstr "Сохранить настройки OLX"
+
+msgid "Field Mapping"
+msgstr "Маппинг полей"
+
+msgid "Map each ALO.bg import field to a WordPress source field."
+msgstr "Сопоставьте каждое поле ALO.bg с полем WordPress."
+
+msgid "ALO field"
+msgstr "Поле ALO"
+
+msgid "required"
+msgstr "обязательное"
+
+msgid "Required field not mapped."
+msgstr "Обязательное поле не задано."
+
+msgid "Value Overrides"
+msgstr "Замена значений"
+
+msgid "Category Mapping"
+msgstr "Маппинг категорий"
+
+msgid "Map WordPress taxonomy terms to ALO subcat_id values."
+msgstr "Сопоставьте термины таксономии WordPress со значениями subcat_id ALO."
+
+msgid "Term"
+msgstr "Термин"
+
+msgid "ALO subcat_id"
+msgstr "ALO subcat_id"
+
+msgid "ALO category (Sale / Primary)"
+msgstr "Категория ALO (Продажа / Основная)"
+
+msgid "ALO category (Rent — optional, for C5 routing)"
+msgstr "Категория ALO (Аренда — опционально, для маршрутизации C5)"
+
+msgid "Used when a term has both a Sale and Rent ALO category configured in C3. Select the WordPress field that determines the deal type."
+msgstr "Используется, если у термина настроены обе категории (Продажа и Аренда) в C3. Выберите поле WordPress, определяющее тип сделки."
+
+msgid "Mapped in C1 to: %s"
+msgstr "Задано в C1: %s"
+
+msgid "Category-specific fields (set per-post in metabox): %s"
+msgstr "Поля, специфичные для категории (задаются в метабоксе для каждого объявления): %s"
+
+msgid "Save ALO Settings"
+msgstr "Сохранить настройки ALO"
+
+msgid "Generated Fields"
+msgstr "Генерируемые поля"
+
+msgid "Post Meta / ACF Fields"
+msgstr "Метаданные / ACF-поля"
+
+msgid "Taxonomy Terms"
+msgstr "Термины таксономии"
+
+msgid "— No WP source (fill per-post)"
+msgstr "— Без источника WP (JSON, заполняется для каждого объявления)"
+
+msgid "— Manual text input (per post)"
+msgstr "— Ввод текста вручную (для каждого объявления)"
+
+msgid "— Manual number input (per post)"
+msgstr "— Ввод числа вручную (для каждого объявления)"
+
+msgid "No posts with an OLX category assigned were found."
+msgstr "Не найдено записей с назначенной категорией OLX."
+
+msgid "No CSV files were generated."
+msgstr "Файлы CSV не были сгенерированы."
+
+msgid "Could not open temp stream."
+msgstr "Не удалось открыть временный поток."
+
+msgid "Could not write file: %s"
+msgstr "Не удалось записать файл: %s"
+
+msgid "Enter text"
+msgstr "Введите текст"
+
+msgid "Enter number"
+msgstr "Введите число"
+
+msgid "Invalid value for field \"%s\" — must be a number between %d and %d. Value was cleared."
+msgstr "Недопустимое значение для поля \"%s\" — должно быть числом от %d до %d. Значение очищено."
+
+msgid "Invalid value for field \"%s\" — must be a number ≥ %s. Value was cleared."
+msgstr "Недопустимое значение для поля \"%s\" — должно быть числом ≥ %s. Значение очищено."
+
+msgid "Invalid value for field \"%s\" — must be a number. Value was cleared."
+msgstr "Недопустимое значение для поля \"%s\" — должно быть числом. Значение очищено."

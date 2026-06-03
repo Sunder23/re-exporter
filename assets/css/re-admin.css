@@ -1,0 +1,1065 @@
+/* ==========================================================================
+   Real Estate Exporter — Admin Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Page wrapper & main tabs
+   -------------------------------------------------------------------------- */
+.re-exporter-wrap h1 {
+	margin-bottom: 12px;
+}
+
+.re-exporter-wrap .nav-tab-wrapper {
+	margin-bottom: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   Notice area
+   -------------------------------------------------------------------------- */
+#re-notice-area {
+	margin-bottom: 14px;
+}
+
+#re-notice-area .notice {
+	margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: Section A (Global)
+   -------------------------------------------------------------------------- */
+.re-section {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 20px 24px;
+	margin-bottom: 24px;
+}
+
+.re-section h2 {
+	margin-top: 0;
+	font-size: 14px;
+	font-weight: 600;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e0e0e0;
+	margin-bottom: 16px;
+}
+
+.re-section .form-table th {
+	width: 220px;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: platform sub-tabs (OLX / ALO)
+   -------------------------------------------------------------------------- */
+.re-platform-tabs {
+	margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: Field Mapping Table (B1 / ALO)
+   -------------------------------------------------------------------------- */
+.re-field-map-table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+.re-field-map-table th:first-child,
+.re-field-map-table td:first-child {
+	width: 38%;
+	font-weight: 500;
+}
+
+.re-field-map-table select {
+	width: 100%;
+	max-width: 380px;
+}
+
+.re-required-row td:first-child {
+	font-weight: 600;
+}
+
+.re-badge {
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: .4px;
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
+.re-badge-required {
+	background: #dc3232;
+	color: #fff;
+}
+
+.re-badge-ok {
+	background: #46b450;
+	color: #fff;
+}
+
+.re-map-warning {
+	display: block;
+	margin-top: 4px;
+	color: #dc3232;
+	font-size: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: Value Override Table (B2)
+   -------------------------------------------------------------------------- */
+.re-value-override-section {
+	margin-bottom: 20px;
+}
+
+.re-value-override-section h4 {
+	margin: 0 0 8px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.re-value-map-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.re-value-map-table th:first-child,
+.re-value-map-table td:first-child {
+	width: 42%;
+	color: #555;
+}
+
+.re-value-map-table select {
+	width: 100%;
+	max-width: 280px;
+}
+
+/* --------------------------------------------------------------------------
+   City search widget — ACF-style (B2 location_city + post metabox)
+   -------------------------------------------------------------------------- */
+.re-city-widget {
+	position: relative;
+	max-width: 280px;
+	box-sizing: border-box;
+}
+
+/* In the post metabox the widget fills the full column width */
+#re-exporter-olx-fields .re-city-widget {
+	max-width: 320px;
+}
+
+/* The fake select trigger */
+.re-city-trigger {
+	display: flex;
+	align-items: center;
+	padding: 5px 8px;
+	border: 1px solid #8c8f94;
+	border-radius: 3px;
+	background: #fff;
+	cursor: pointer;
+	min-height: 30px;
+	font-size: 13px;
+	color: #3c434a;
+	user-select: none;
+	gap: 4px;
+	box-sizing: border-box;
+}
+
+.re-city-trigger:hover {
+	border-color: #2271b1;
+}
+
+.re-city-widget.is-open .re-city-trigger {
+	border-color: #2271b1;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.re-city-label {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 500;
+}
+
+.re-city-label.is-placeholder {
+	color: #a7aaad;
+	font-weight: 400;
+}
+
+.re-city-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+}
+
+.re-city-clear-btn {
+	display: none; /* shown via JS when value is set */
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #a7aaad;
+	font-size: 13px;
+	padding: 0 2px;
+	line-height: 1;
+}
+
+.re-city-clear-btn:hover {
+	color: #d63638;
+}
+
+.re-city-caret {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid #8c8f94;
+	transition: transform .15s;
+}
+
+.re-city-widget.is-open .re-city-caret {
+	transform: rotate( 180deg );
+}
+
+/* Dropdown panel */
+.re-city-panel {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 200;
+	background: #fff;
+	border: 1px solid #2271b1;
+	border-top: none;
+	border-radius: 0 0 3px 3px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+}
+
+.re-city-search {
+	display: block;
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	padding: 6px 8px;
+	font-size: 13px;
+	outline: none;
+	box-sizing: border-box;
+}
+
+.re-city-results {
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.re-city-option {
+	padding: 6px 10px;
+	cursor: pointer;
+	font-size: 13px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.re-city-option:hover {
+	background: #f0f6fc;
+	color: #2271b1;
+}
+
+.re-city-no-results,
+.re-city-loading {
+	padding: 8px 10px;
+	color: #a7aaad;
+	font-size: 13px;
+	font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: Category Mapping (B3)
+   -------------------------------------------------------------------------- */
+.re-category-map-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.re-category-map-table th:first-child,
+.re-category-map-table td:first-child {
+	width: 40%;
+}
+
+.re-category-map-table select {
+	width: 100%;
+	max-width: 320px;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: B4 collapsible blocks
+   -------------------------------------------------------------------------- */
+.re-collapse-block {
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	margin-bottom: 8px;
+	overflow: hidden;
+}
+
+.re-collapse-toggle {
+	width: 100%;
+	text-align: left;
+	background: #f6f7f7;
+	border: none;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 10px 14px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.re-collapse-toggle:hover {
+	background: #f0f0f1;
+}
+
+.re-collapse-toggle .re-chevron {
+	margin-left: auto;
+	font-size: 10px;
+	transition: transform .15s;
+}
+
+.re-collapse-toggle[aria-expanded="true"] .re-chevron {
+	transform: rotate( 180deg );
+}
+
+.re-collapse-body {
+	padding: 12px 14px;
+}
+
+.re-mapped-notice {
+	color: #46b450;
+	font-size: 12px;
+	font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Settings: B5 Deal Type Routing
+   -------------------------------------------------------------------------- */
+.re-deal-map-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.re-deal-map-table th:first-child,
+.re-deal-map-table td:first-child {
+	width: 40%;
+}
+
+.re-deal-radio label {
+	margin-right: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Action bars
+   -------------------------------------------------------------------------- */
+.re-action-bar {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.re-action-bar .button-primary {
+	margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Progress bar
+   -------------------------------------------------------------------------- */
+.re-progress-bar {
+	display: flex;
+	margin: 0 0 28px;
+	padding: 0;
+	list-style: none;
+	border-bottom: 3px solid #e0e0e0;
+}
+
+.re-progress-step {
+	flex: 1;
+	text-align: center;
+	padding: 10px 4px 12px;
+	font-size: 12px;
+	color: #999;
+	cursor: default;
+	transition: color .15s;
+}
+
+.re-progress-step .step-num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #ddd;
+	color: #666;
+	font-weight: 700;
+	font-size: 11px;
+	margin-right: 5px;
+	vertical-align: middle;
+	transition: background .15s, color .15s;
+}
+
+.re-progress-step.is-active {
+	color: var(--wp-admin-theme-color, #2271b1);
+	font-weight: 600;
+	border-bottom: 3px solid var(--wp-admin-theme-color, #2271b1);
+	margin-bottom: -3px;
+}
+
+.re-progress-step.is-active .step-num {
+	background: var(--wp-admin-theme-color, #2271b1);
+	color: #fff;
+}
+
+.re-progress-step.is-done .step-num {
+	background: #46b450;
+	color: #fff;
+}
+
+.re-progress-step.is-done {
+	color: #46b450;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Step panels
+   -------------------------------------------------------------------------- */
+.re-exp-step {
+	display: none;
+}
+
+.re-exp-step h2 {
+	margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Posts table (Step 1)
+   -------------------------------------------------------------------------- */
+.re-posts-table-wrap {
+	max-height: 520px;
+	overflow-y: auto;
+	margin-bottom: 12px;
+	border: 1px solid #e0e0e0;
+	border-radius: 3px;
+}
+
+.re-posts-table {
+	margin: 0 !important;
+	border: none !important;
+}
+
+.re-posts-table thead th {
+	position: sticky;
+	top: 0;
+	background: #f6f7f7;
+	z-index: 1;
+	border-bottom: 2px solid #ccc;
+}
+
+.re-col-check { width: 36px; }
+
+#re-selection-counter {
+	font-size: 13px;
+	color: #555;
+	margin-left: 4px;
+}
+
+.re-row-warning {
+	background: #fff8e5 !important;
+}
+
+.re-warn-inline {
+	color: #b26200;
+	font-size: 12px;
+}
+
+.re-cat-badge {
+	font-size: 11px;
+	background: #e8f0fe;
+	color: #1a73e8;
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Platform cards (Step 2)
+   -------------------------------------------------------------------------- */
+.re-platform-options {
+	display: flex;
+	gap: 16px;
+	flex-wrap: wrap;
+	margin: 16px 0 8px;
+}
+
+.re-platform-card {
+	border: 2px solid #ddd;
+	border-radius: 6px;
+	padding: 16px 20px;
+	cursor: pointer;
+	transition: border-color .15s, box-shadow .15s;
+	min-width: 230px;
+	max-width: 320px;
+}
+
+.re-platform-card:hover {
+	border-color: var(--wp-admin-theme-color, #2271b1);
+	box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+
+.re-platform-card:has(input:checked) {
+	border-color: var(--wp-admin-theme-color, #2271b1);
+	box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #2271b1);
+}
+
+.re-platform-card input[type="radio"] {
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+.re-platform-card label {
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 15px;
+	vertical-align: middle;
+}
+
+.re-platform-card p {
+	margin: 8px 0 0;
+	color: #666;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Review (Step 3)
+   -------------------------------------------------------------------------- */
+.re-review-summary {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 8px 20px;
+	background: #f6f7f7;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 16px 20px;
+	margin-bottom: 16px;
+	max-width: 480px;
+}
+
+.re-review-summary dt { font-weight: 600; color: #555; }
+.re-review-summary dd { margin: 0; }
+
+.re-review-table { margin-bottom: 16px; }
+
+.re-review-warnings {
+	background: #fff8e5;
+	border-left: 4px solid #f0b849;
+	padding: 12px 16px;
+	margin-top: 12px;
+	border-radius: 0 4px 4px 0;
+}
+
+.re-review-warnings ul {
+	margin: 8px 0 0 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Export Tab: Download list (Step 4)
+   -------------------------------------------------------------------------- */
+.re-download-list {
+	list-style: none;
+	margin: 12px 0 0;
+	padding: 0;
+}
+
+.re-download-list li {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.re-download-list li:last-child {
+	border-bottom: none;
+}
+
+.re-category-label {
+	color: #646970;
+	font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Spinner overlay
+   -------------------------------------------------------------------------- */
+#re-spinner-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, .5);
+	z-index: 99999;
+	align-items: center;
+	justify-content: center;
+}
+
+#re-spinner-overlay.is-visible {
+	display: flex;
+}
+
+.re-spinner-inner {
+	background: #fff;
+	border-radius: 8px;
+	padding: 36px 48px;
+	text-align: center;
+	box-shadow: 0 4px 24px rgba(0,0,0,.25);
+}
+
+.re-spinner-icon {
+	display: block;
+	width: 38px;
+	height: 38px;
+	border: 4px solid #e0e0e0;
+	border-top-color: var(--wp-admin-theme-color, #2271b1);
+	border-radius: 50%;
+	animation: re-spin .75s linear infinite;
+	margin: 0 auto 14px;
+}
+
+@keyframes re-spin {
+	to { transform: rotate(360deg); }
+}
+
+.re-spinner-msg {
+	font-size: 14px;
+	color: #333;
+}
+
+
+/* --------------------------------------------------------------------------
+   Number field validation error state
+   -------------------------------------------------------------------------- */
+.re-number-field.re-field-error {
+	border-color: #d63638;
+	box-shadow: 0 0 0 1px #d63638;
+}
+
+/* --------------------------------------------------------------------------
+   Gallery field (RE Exporter — Gallery metabox)
+   -------------------------------------------------------------------------- */
+.re-gallery-wrap {
+	padding: 4px 0;
+}
+
+.re-gallery-items {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	min-height: 20px;
+	margin-bottom: 8px;
+}
+
+.re-gallery-item {
+	position: relative;
+	width: 80px;
+	height: 80px;
+	border: 2px solid #ddd;
+	border-radius: 3px;
+	overflow: hidden;
+	cursor: default;
+	background: #f6f7f7;
+	box-sizing: border-box;
+	flex-shrink: 0;
+}
+
+.re-gallery-item img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.re-gallery-remove {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	line-height: 1;
+	font-size: 11px;
+	background: rgba(0, 0, 0, .65);
+	color: #fff;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+	display: none;
+	align-items: center;
+	justify-content: center;
+}
+
+.re-gallery-item:hover .re-gallery-remove {
+	display: flex;
+}
+
+.re-gallery-remove:hover {
+	background: #d63638;
+}
+
+.re-gallery-drag-handle {
+	position: absolute;
+	bottom: 2px;
+	left: 2px;
+	font-size: 12px;
+	color: rgba(255, 255, 255, .85);
+	cursor: grab;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+	line-height: 1;
+	display: none;
+}
+
+.re-gallery-item:hover .re-gallery-drag-handle {
+	display: block;
+}
+
+.re-gallery-drag-handle:active {
+	cursor: grabbing;
+}
+
+.re-gallery-item.ui-sortable-helper {
+	border-color: #2271b1;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+}
+
+.re-gallery-item.ui-sortable-placeholder {
+	border: 2px dashed #c3c4c7;
+	background: #f6f7f7;
+	visibility: visible !important;
+}
+
+.re-gallery-empty {
+	margin: 0 0 8px;
+	color: #646970;
+	font-style: italic;
+}
+
+.re-gallery-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+
+.re-gallery-count {
+	font-size: 12px;
+	color: #646970;
+}
+
+/* ==========================================================================
+   Post Metabox — Tabbed UI
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Tab navigation bar
+   -------------------------------------------------------------------------- */
+.re-tabs {
+	margin: -6px -12px 0;
+}
+
+.re-tab-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-bottom: 2px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.re-tab-nav li {
+	margin: 0;
+	padding: 0;
+}
+
+.re-tab-btn {
+	display: inline-block;
+	padding: 9px 18px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #3c434a;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -2px;
+	cursor: pointer;
+	transition: color .12s, border-color .12s;
+	outline: none;
+	line-height: 1.4;
+}
+
+.re-tab-btn:hover {
+	color: #2271b1;
+}
+
+.re-tab-btn.active {
+	color: #2271b1;
+	border-bottom-color: #2271b1;
+	background: #fff;
+	font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Tab panels
+   -------------------------------------------------------------------------- */
+.re-tab-panel {
+	padding: 14px 12px 10px;
+}
+
+.re-tab-empty {
+	color: #646970;
+	margin: 4px 0;
+}
+
+.re-tab-subcat-label {
+	margin: 0 0 10px;
+	padding: 5px 8px;
+	background: #f0f6fc;
+	border-left: 3px solid #2271b1;
+	border-radius: 0 3px 3px 0;
+	font-size: 12px;
+	color: #2271b1;
+	font-weight: 500;
+}
+
+.re-tab-section {
+	padding-bottom: 14px;
+	margin-bottom: 14px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.re-tab-section:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Fields table — shared by OLX and ALO tabs
+   -------------------------------------------------------------------------- */
+.re-fields-table {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.re-fields-table .re-field-row + .re-field-row td {
+	border-top: 1px solid #f0f0f1;
+}
+
+.re-fields-table .re-field-row td {
+	padding: 10px 8px;
+	vertical-align: middle;
+}
+
+/* Label column — fixed width, right padding for gap */
+.re-field-label {
+	width: 220px;
+	padding-right: 16px !important;
+	vertical-align: top;
+	padding-top: 12px !important;
+}
+
+.re-field-label strong {
+	display: block;
+	color: #1d2327;
+	line-height: 1.35;
+}
+
+.re-field-key {
+	display: block;
+	font-size: 11px;
+	color: #9ca3af;
+	font-family: monospace;
+	margin-top: 2px;
+	line-height: 1.2;
+}
+
+/* Input column — takes remaining width; inputs constrained */
+.re-field-input {
+	width: auto;
+	vertical-align: middle;
+}
+
+.re-field-input input[type="text"],
+.re-field-input input[type="number"],
+.re-field-input select {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.re-field-input .regular-text {
+	width: 100%;
+	max-width: 360px;
+}
+
+/* --------------------------------------------------------------------------
+   Field display states
+   -------------------------------------------------------------------------- */
+
+/* Unmapped — not configured in any field map */
+.re-field-row.re-field-unmapped .re-field-label strong {
+	color: #a7aaad;
+}
+
+.re-field-unmapped {
+	color: #a7aaad;
+	font-style: italic;
+	font-size: 12px;
+}
+
+/* Auto — value resolved from a mapped source; shown read-only */
+.re-field-row.re-field-auto .re-field-label strong,
+.re-field-row.re-field-always-auto .re-field-label strong {
+	color: #646970;
+}
+
+.re-field-auto-val {
+	display: inline-block;
+	padding: 2px 7px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+	font-size: 12px;
+	color: #3c434a;
+	max-width: 340px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.re-field-auto-src {
+	font-size: 11px;
+	color: #a7aaad;
+	font-family: monospace;
+}
+
+.re-field-auto-info {
+	font-size: 12px;
+	color: #646970;
+	font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   Required field badge
+   -------------------------------------------------------------------------- */
+.re-badge-required {
+	display: inline-block;
+	padding: 1px 5px;
+	background: #fcf0f1;
+	border: 1px solid #f5c0c2;
+	border-radius: 3px;
+	font-size: 10px;
+	font-weight: 600;
+	color: #b32d2e;
+	text-transform: uppercase;
+	letter-spacing: .3px;
+	vertical-align: middle;
+	line-height: 1.5;
+	margin-left: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Select & checkbox fields in the fields table
+   -------------------------------------------------------------------------- */
+.re-select-field {
+	min-width: 200px;
+	max-width: 100%;
+}
+
+.re-checkbox-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 12px;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+.re-checkbox-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.re-checkbox-item input[type="checkbox"] {
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.re-opt-key {
+	color: #a7aaad;
+	font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
+   ALO Location widget inside the ALO tab
+   -------------------------------------------------------------------------- */
+.re-alo-location-widget {
+	margin-bottom: 14px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.re-location-widget-title {
+	margin: 0 0 8px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: .4px;
+	color: #646970;
+}
+
+/* --------------------------------------------------------------------------
+   Posts list — Export column
+   -------------------------------------------------------------------------- */
+.column-re_export_enabled {
+	width: 70px;
+	text-align: center;
+}
+
+.re-export-col-flag {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.re-export-col-flag[data-enabled="1"] {
+	color: #46b450;
+}
+
+.re-export-col-flag[data-enabled="0"] {
+	color: #a7aaad;
+}
+
+/* --------------------------------------------------------------------------
+   Gallery tab inside the metabox
+   -------------------------------------------------------------------------- */
+#re-tab-gallery .re-gallery-wrap {
+	padding: 0;
+}

@@ -1,0 +1,1 @@
+{"data":{"myAds":{"categoryField":{"__typename":"MyAdsSelectableCategoryField","values":{"totalCount":3,"items":[{"label":"на ден","sublabel":null,"value":"per_day","parentValue":""},{"label":"на час","sublabel":null,"value":"per_hour","parentValue":""},{"label":"дългосрочно","sublabel":null,"value":"long_term","parentValue":""}]}}}}}
