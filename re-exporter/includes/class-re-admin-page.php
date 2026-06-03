@@ -36,6 +36,9 @@ class Admin_Page {
 	/** @var Field_Scanner */
 	private $scanner;
 
+	/** @var Platform_Registry */
+	private $platform_registry;
+
 	/** @var Export_Wizard */
 	private $wizard;
 
@@ -43,19 +46,22 @@ class Admin_Page {
 	 * @param Settings      $settings
 	 * @param OLX_Template  $olx_template
 	 * @param ALO_Template  $alo_template
-	 * @param Field_Scanner $scanner
+	 * @param Field_Scanner    $scanner
+	 * @param Platform_Registry $platform_registry
 	 */
 	public function __construct(
 		Settings $settings,
 		OLX_Template $olx_template,
 		ALO_Template $alo_template,
-		Field_Scanner $scanner
+		Field_Scanner $scanner,
+		Platform_Registry $platform_registry
 	) {
-		$this->settings     = $settings;
-		$this->olx_template = $olx_template;
-		$this->alo_template = $alo_template;
-		$this->scanner      = $scanner;
-		$this->wizard       = new Export_Wizard( $settings, $olx_template, $alo_template );
+		$this->settings          = $settings;
+		$this->olx_template      = $olx_template;
+		$this->alo_template      = $alo_template;
+		$this->scanner           = $scanner;
+		$this->platform_registry = $platform_registry;
+		$this->wizard            = new Export_Wizard( $settings, $olx_template, $alo_template, $platform_registry );
 
 		add_action( 'admin_menu',            array( $this, 'register_menu' ) );
 		add_action( 'admin_init',            array( $this, 'handle_form_saves' ) );
@@ -397,7 +403,7 @@ class Admin_Page {
 		$base_url = trailingslashit( $upload['baseurl'] ) . 're-exporter/';
 		$result   = array();
 
-		foreach ( array( 'olx', 'alo', 'imoti', 'realistimo' ) as $platform ) {
+		foreach ( $this->platform_registry->get_codes() as $platform ) {
 			$plat_dir = $base_dir . $platform . '/';
 			$plat_url = $base_url . $platform . '/';
 			$runs     = array();
@@ -463,7 +469,7 @@ class Admin_Page {
 	 * @param string $run       Folder name (timestamp string).
 	 */
 	private function delete_run_dir( $platform, $run ) {
-		if ( ! in_array( $platform, array( 'olx', 'alo', 'imoti', 'realistimo' ), true ) ) {
+		if ( ! $this->platform_registry->has( $platform ) ) {
 			return;
 		}
 		// $run must be alphanumeric/underscores/dashes only (no path traversal).
@@ -493,7 +499,7 @@ class Admin_Page {
 	 * @param string $platform  'olx' | 'alo'
 	 */
 	private function delete_all_runs( $platform ) {
-		if ( ! in_array( $platform, array( 'olx', 'alo', 'imoti', 'realistimo' ), true ) ) {
+		if ( ! $this->platform_registry->has( $platform ) ) {
 			return;
 		}
 
@@ -518,7 +524,7 @@ class Admin_Page {
 	 */
 	private function get_active_sub() {
 		$sub = isset( $_GET['sub'] ) ? sanitize_key( wp_unslash( $_GET['sub'] ) ) : 'olx';
-		return in_array( $sub, array( 'olx', 'alo', 'imoti', 'realistimo' ), true ) ? $sub : 'olx';
+		return $this->platform_registry->has( $sub ) ? $sub : 'olx';
 	}
 
 	// =========================================================================

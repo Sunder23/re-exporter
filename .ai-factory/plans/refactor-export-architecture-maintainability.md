@@ -31,17 +31,17 @@ Refactor the export architecture of the WordPress plugin incrementally so that p
 ## Tasks
 
 ### Phase 1: Establish Refactor Boundaries
-- [ ] Task 1: Inventory current platform responsibilities and define target contracts for export orchestration, platform modules, and shared infrastructure.
+- [x] Task 1: Inventory current platform responsibilities and define target contracts for export orchestration, platform modules, and shared infrastructure.
   Deliverable: a concrete internal contract list covering platform definition, export run inputs/outputs, category resolution, required-field validation, and file result descriptors.
   Files: `re-exporter/includes/class-re-export-wizard.php`, `re-exporter/includes/class-re-settings.php`, `re-exporter/includes/class-re-exporter-olx.php`, `re-exporter/includes/class-re-exporter-alo.php`, `re-exporter/includes/class-re-exporter-imoti.php`, `re-exporter/includes/class-re-exporter-realistimo.php`.
   Logging requirements: no new broad debug tracing; if temporary instrumentation is needed during extraction, log only WARN/ERROR at orchestration boundaries and remove any one-off exploratory logs before completion.
 
-- [ ] Task 2: Introduce shared export architecture primitives for platform-independent orchestration.
+- [x] Task 2: Introduce shared export architecture primitives for platform-independent orchestration.
   Deliverable: new lightweight classes or interfaces for concepts such as platform definitions, export requests, export results, and platform handlers, without changing user-visible behavior yet.
   Files: create under `re-exporter/includes/` a small set of new shared classes for export contracts; update `re-exporter/re-exporter.php` to load them in the correct order.
   Logging requirements: add only minimal boundary logging for orchestration failures and invalid platform resolution, keeping log points at service entry/exit and fatal failure branches.
 
-- [ ] Task 3: Add a platform registry or equivalent composition layer that centralizes how platforms are discovered and wired.
+- [x] Task 3: Add a platform registry or equivalent composition layer that centralizes how platforms are discovered and wired.
   Deliverable: one place that maps `olx`, `alo`, `imoti`, and `realistimo` to their handlers and human labels so wizard/admin code no longer hardcodes platform branching everywhere.
   Files: create a registry/composition class under `re-exporter/includes/`; update `re-exporter/re-exporter.php` and any direct platform-selection logic in `re-exporter/includes/class-re-export-wizard.php`.
   Logging requirements: log only unknown platform lookup or handler resolution failures at ERROR level; avoid info-level noise for normal successful dispatch.

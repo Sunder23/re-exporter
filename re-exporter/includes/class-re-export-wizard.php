@@ -32,15 +32,20 @@ class Export_Wizard {
 	/** @var ALO_Template */
 	private $alo_template;
 
+	/** @var Platform_Registry */
+	private $platform_registry;
+
 	/**
-	 * @param Settings     $settings
-	 * @param OLX_Template $olx_template
-	 * @param ALO_Template $alo_template
+	 * @param Settings          $settings
+	 * @param OLX_Template      $olx_template
+	 * @param ALO_Template      $alo_template
+	 * @param Platform_Registry $platform_registry
 	 */
-	public function __construct( Settings $settings, OLX_Template $olx_template, ALO_Template $alo_template ) {
-		$this->settings     = $settings;
-		$this->olx_template = $olx_template;
-		$this->alo_template = $alo_template;
+	public function __construct( Settings $settings, OLX_Template $olx_template, ALO_Template $alo_template, Platform_Registry $platform_registry ) {
+		$this->settings          = $settings;
+		$this->olx_template      = $olx_template;
+		$this->alo_template      = $alo_template;
+		$this->platform_registry = $platform_registry;
 
 		add_action( 'wp_ajax_re_exp_load_posts', array( $this, 'ajax_load_posts' ) );
 		add_action( 'wp_ajax_re_exp_review',     array( $this, 'ajax_review' ) );
@@ -238,7 +243,7 @@ class Export_Wizard {
 
 		$platform = isset( $_POST['platform'] ) ? sanitize_key( wp_unslash( $_POST['platform'] ) ) : '';
 
-		if ( ! in_array( $platform, array( 'olx', 'alo', 'imoti', 'realistimo' ), true ) ) {
+		if ( ! $this->platform_registry->has( $platform ) ) {
 			wp_send_json_error( __( 'Invalid parameters.', 're-exporter' ) );
 		}
 
@@ -561,7 +566,7 @@ class Export_Wizard {
 
 		$platform = isset( $_POST['platform'] ) ? sanitize_key( wp_unslash( $_POST['platform'] ) ) : '';
 
-		if ( ! in_array( $platform, array( 'olx', 'alo', 'imoti', 'realistimo' ), true ) ) {
+		if ( ! $this->platform_registry->has( $platform ) ) {
 			wp_send_json_error( __( 'Invalid parameters.', 're-exporter' ) );
 		}
 
@@ -570,32 +575,32 @@ class Export_Wizard {
 			wp_send_json_error( __( 'No posts found matching the current export filters.', 're-exporter' ) );
 		}
 
+		$handler = $this->platform_registry->get_handler( $platform );
+		if ( ! $handler ) {
+			wp_send_json_error( __( 'Export platform could not be resolved.', 're-exporter' ) );
+		}
+
 		$upload    = wp_upload_dir();
 		$base_dir  = trailingslashit( $upload['basedir'] ) . 're-exporter/' . $platform;
 		$timestamp = gmdate( 'Y-m-d_H-i-s' );
 		$out_dir   = trailingslashit( $base_dir ) . $timestamp;
-
-		if ( 'olx' === $platform ) {
-			$exporter = new Exporter_OLX( $this->settings, $this->olx_template, $this );
-			$result   = $exporter->generate( $post_ids, $out_dir );
-		} elseif ( 'alo' === $platform ) {
-			$exporter = new Exporter_ALO( $this->settings, $this->alo_template, $this );
-			$result   = $exporter->generate( $post_ids, $out_dir );
-		} elseif ( 'realistimo' === $platform ) {
-			$exporter = new Exporter_Realistimo( $this->settings );
-			$result   = $exporter->generate( $post_ids, $out_dir );
-		} else {
-			$exporter = new Exporter_Imoti( $this->settings );
-			$result   = $exporter->generate( $post_ids, $out_dir );
-		}
+		$request   = new Export_Request(
+			$platform,
+			$post_ids,
+			$out_dir,
+			array( 'wizard' => $this )
+		);
+		$result    = $handler->export( $request );
 
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( $result->get_error_message() );
 		}
 
+		$files = $result->to_legacy_files();
+
 		// Log each file.
 		$post_type = $this->settings->get_post_type();
-		foreach ( $result as $file ) {
+		foreach ( $files as $file ) {
 			Export_Logger::log( array(
 				'platform'     => $platform,
 				'post_type'    => $post_type,
@@ -607,7 +612,7 @@ class Export_Wizard {
 		}
 
 		ob_start();
-		$this->render_download_links( $result );
+		$this->render_download_links( $files );
 		$html = ob_get_clean();
 
 		wp_send_json_success( array( 'html' => $html ) );

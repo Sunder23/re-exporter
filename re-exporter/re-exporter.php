@@ -35,6 +35,16 @@ require_once RE_EXPORTER_DIR . 'includes/class-re-alo-template.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-field-scanner.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-field-resolver.php';
 require_once RE_EXPORTER_DIR . 'includes/class-re-settings.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-export-request.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-export-file-result.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-export-result.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-definition.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-handler-interface.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-handler-olx.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-handler-alo.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-handler-imoti.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-handler-realistimo.php';
+require_once RE_EXPORTER_DIR . 'includes/class-re-platform-registry.php';
 
 // ── Feature classes (depend on core utilities) ────────────────────────────────
 require_once RE_EXPORTER_DIR . 'includes/class-re-gallery-field.php';
@@ -84,6 +94,12 @@ add_action( 'plugins_loaded', function () {
 	$olx_template = new RE_Exporter\OLX_Template();
 	$alo_template = new RE_Exporter\ALO_Template();
 	$scanner      = new RE_Exporter\Field_Scanner();
+	$platforms    = new RE_Exporter\Platform_Registry( array(
+		new RE_Exporter\Platform_Handler_OLX( $settings, $olx_template ),
+		new RE_Exporter\Platform_Handler_ALO( $settings, $alo_template ),
+		new RE_Exporter\Platform_Handler_Imoti( $settings ),
+		new RE_Exporter\Platform_Handler_Realistimo( $settings ),
+	) );
 
 	// Gallery field (media repeater, source key __re_gallery__).
 	$gallery = new RE_Exporter\Gallery_Field( $settings );
@@ -93,6 +109,6 @@ add_action( 'plugins_loaded', function () {
 
 	// Admin page (includes Export_Wizard AJAX hooks) — admin-only.
 	if ( is_admin() ) {
-		new RE_Exporter\Admin_Page( $settings, $olx_template, $alo_template, $scanner );
+		new RE_Exporter\Admin_Page( $settings, $olx_template, $alo_template, $scanner, $platforms );
 	}
 } );
