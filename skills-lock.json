@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "wordpress-plugin-development": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/wordpress-plugin-development/SKILL.md",
+      "computedHash": "8fcaa14fd314094fc92fde7c3b50c9dcfcd9a1fd845b07633b8bf0fcda30fb6e"
+    },
+    "wordpress-pro": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/wordpress-pro/SKILL.md",
+      "computedHash": "f237f4c4fdecc4eb65f88ab192fc9398dbf89bad9a74d058304d73504a88f86a"
+    },
+    "wp-plugin-directory-guidelines": {
+      "source": "wordpress/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/wp-plugin-directory-guidelines/SKILL.md",
+      "computedHash": "69008143ef4750a0be4105a1a5574ba7f984b0cee7db23a0b5886bc9e9441db2"
+    }
+  }
+}
