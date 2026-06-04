@@ -30,6 +30,10 @@ class OLX_Settings {
 		return $this->settings->get_olx_field_map();
 	}
 
+	public function get_field_map_overrides() {
+		return $this->settings->get_olx_field_map_overrides();
+	}
+
 	public function get_value_map() {
 		return $this->settings->get_olx_value_map();
 	}

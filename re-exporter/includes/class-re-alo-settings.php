@@ -30,6 +30,10 @@ class ALO_Settings {
 		return $this->settings->get_alo_field_map();
 	}
 
+	public function get_field_map_overrides() {
+		return $this->settings->get_alo_field_map_overrides();
+	}
+
 	public function get_value_map() {
 		return $this->settings->get_alo_value_map();
 	}

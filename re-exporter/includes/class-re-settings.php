@@ -40,6 +40,7 @@ class Settings {
 	const OPT_POST_TYPE        = 're_exporter_post_type';
 	const OPT_ONLY_PUBLISHED   = 're_exporter_only_published';
 	const OPT_USE_FLAG         = 're_exporter_use_per_post_flag';
+	const OPT_SHARED_FIELD_MAP = 're_exporter_shared_field_map';
 
 	// Country
 	const OPT_OLX_COUNTRY      = 're_exporter_olx_country';
@@ -51,6 +52,57 @@ class Settings {
 		'ro' => 'https://www.olx.ro',
 		'pt' => 'https://www.olx.pt',
 		'ua' => 'https://www.olx.ua',
+	);
+
+	/**
+	 * Shared listing fields configured once and reused across platforms.
+	 *
+	 * @var array<string,array<string,mixed>>
+	 */
+	private static $shared_field_definitions = array(
+		'listing_title' => array(
+			'label'   => 'Listing title',
+			'targets' => array(
+				'olx' => array( 'title' ),
+				'alo' => array( 'name' ),
+			),
+		),
+		'listing_description' => array(
+			'label'   => 'Listing description',
+			'targets' => array(
+				'olx'        => array( 'description' ),
+				'alo'        => array( 'desc' ),
+				'imoti'      => array( 'Description' ),
+				'realistimo' => array( 'description' ),
+			),
+		),
+		'listing_price' => array(
+			'label'   => 'Listing price',
+			'targets' => array(
+				'olx'        => array( 'price_value' ),
+				'alo'        => array( 'price' ),
+				'imoti'      => array( 'Price' ),
+				'realistimo' => array( 'price' ),
+			),
+		),
+		'listing_currency' => array(
+			'label'   => 'Listing currency',
+			'targets' => array(
+				'olx'        => array( 'price_currency' ),
+				'alo'        => array( 'currency' ),
+				'imoti'      => array( 'CurrencyID' ),
+				'realistimo' => array( 'currency' ),
+			),
+		),
+		'listing_images' => array(
+			'label'   => 'Listing images',
+			'targets' => array(
+				'olx'        => array( 'images' ),
+				'alo'        => array( 'images' ),
+				'imoti'      => array( 'Images' ),
+				'realistimo' => array( 'images' ),
+			),
+		),
 	);
 
 	// OLX
@@ -195,6 +247,49 @@ class Settings {
 	}
 
 	/**
+	 * @return array<string,array<string,mixed>>
+	 */
+	public function get_shared_field_definitions() {
+		return self::$shared_field_definitions;
+	}
+
+	/**
+	 * @return array<string,string> [ shared_field_key => source_key ]
+	 */
+	public function get_shared_field_map() {
+		$shared_map = $this->get_array_option( self::OPT_SHARED_FIELD_MAP );
+		$normalized = array();
+
+		foreach ( self::$shared_field_definitions as $shared_key => $definition ) {
+			$source = isset( $shared_map[ $shared_key ] ) ? sanitize_text_field( (string) $shared_map[ $shared_key ] ) : '__skip__';
+			$normalized[ $shared_key ] = '' !== $source ? $source : '__skip__';
+		}
+
+		return $normalized;
+	}
+
+	/**
+	 * @param string $platform
+	 * @return array<string,string> [ platform_field => shared_field_key ]
+	 */
+	public function get_shared_targets_for_platform( $platform ) {
+		$platform = sanitize_key( (string) $platform );
+		$targets  = array();
+
+		foreach ( self::$shared_field_definitions as $shared_key => $definition ) {
+			if ( empty( $definition['targets'][ $platform ] ) || ! is_array( $definition['targets'][ $platform ] ) ) {
+				continue;
+			}
+
+			foreach ( $definition['targets'][ $platform ] as $platform_field ) {
+				$targets[ (string) $platform_field ] = $shared_key;
+			}
+		}
+
+		return $targets;
+	}
+
+	/**
 	 * Validate and persist Section A (Global Settings).
 	 *
 	 * @param array $post  Raw $_POST data.
@@ -224,6 +319,17 @@ class Settings {
 		update_option( self::OPT_ONLY_PUBLISHED, isset( $post['re_only_published'] )   ? '1' : '0' );
 		update_option( self::OPT_USE_FLAG,        isset( $post['re_use_per_post_flag'] ) ? '1' : '0' );
 		update_option( self::OPT_OLX_COUNTRY,    $country );
+
+		$shared_field_map = array();
+		if ( ! empty( $post['re_shared_field_map'] ) && is_array( $post['re_shared_field_map'] ) ) {
+			foreach ( self::$shared_field_definitions as $shared_key => $definition ) {
+				$source = isset( $post['re_shared_field_map'][ $shared_key ] )
+					? sanitize_text_field( wp_unslash( $post['re_shared_field_map'][ $shared_key ] ) )
+					: '__skip__';
+				$shared_field_map[ $shared_key ] = '' !== $source ? $source : '__skip__';
+			}
+		}
+		update_option( self::OPT_SHARED_FIELD_MAP, $shared_field_map );
 	}
 
 	// =========================================================================
@@ -234,6 +340,13 @@ class Settings {
 	 * @return array<string,string>  [ csv_column => source_key ]
 	 */
 	public function get_olx_field_map() {
+		return $this->get_effective_platform_field_map( 'olx', $this->get_olx_field_map_overrides() );
+	}
+
+	/**
+	 * @return array<string,string> [ csv_column => source_key ]
+	 */
+	public function get_olx_field_map_overrides() {
 		return $this->get_array_option( self::OPT_OLX_FIELD_MAP );
 	}
 
@@ -321,7 +434,7 @@ class Settings {
 		if ( ! empty( $post['olx_field_map'] ) && is_array( $post['olx_field_map'] ) ) {
 			foreach ( $post['olx_field_map'] as $col => $source ) {
 				$col              = sanitize_text_field( wp_unslash( $col ) );
-				$source           = sanitize_text_field( wp_unslash( $source ) );
+				$source           = $this->normalize_platform_field_source( 'olx', $col, sanitize_text_field( wp_unslash( $source ) ) );
 				$field_map[ $col ] = $source;
 			}
 		}
@@ -434,6 +547,13 @@ class Settings {
 	 * @return array<string,string>  [ alo_field => source_key ]
 	 */
 	public function get_alo_field_map() {
+		return $this->get_effective_platform_field_map( 'alo', $this->get_alo_field_map_overrides() );
+	}
+
+	/**
+	 * @return array<string,string> [ alo_field => source_key ]
+	 */
+	public function get_alo_field_map_overrides() {
 		return $this->normalize_alo_dot_keys( $this->get_array_option( self::OPT_ALO_FIELD_MAP ) );
 	}
 
@@ -529,7 +649,7 @@ class Settings {
 			foreach ( $post['alo_field_map'] as $alo_key => $source ) {
 				// Restore dot notation: '|' was used in form names to avoid PHP dot→underscore conversion.
 				$alo_key              = str_replace( '|', '.', sanitize_text_field( wp_unslash( $alo_key ) ) );
-				$source               = sanitize_text_field( wp_unslash( $source ) );
+				$source               = $this->normalize_platform_field_source( 'alo', $alo_key, sanitize_text_field( wp_unslash( $source ) ) );
 				$field_map[ $alo_key ] = $source;
 			}
 		}
@@ -720,6 +840,13 @@ class Settings {
 	 * @return array<string,string>  [ imoti_field => source_key ]
 	 */
 	public function get_imoti_field_map() {
+		return $this->get_effective_platform_field_map( 'imoti', $this->get_imoti_field_map_overrides() );
+	}
+
+	/**
+	 * @return array<string,string> [ imoti_field => source_key ]
+	 */
+	public function get_imoti_field_map_overrides() {
 		return $this->get_array_option( self::OPT_IMOTI_FIELD_MAP );
 	}
 
@@ -803,7 +930,7 @@ class Settings {
 		if ( ! empty( $post['imoti_field_map'] ) && is_array( $post['imoti_field_map'] ) ) {
 			foreach ( $post['imoti_field_map'] as $field => $source ) {
 				$field              = sanitize_text_field( wp_unslash( $field ) );
-				$source             = sanitize_text_field( wp_unslash( $source ) );
+				$source             = $this->normalize_platform_field_source( 'imoti', $field, sanitize_text_field( wp_unslash( $source ) ) );
 				$field_map[ $field ] = $source;
 			}
 		}
@@ -891,6 +1018,13 @@ class Settings {
 	 * @return array<string,string>  [ xml_field => source_key ]
 	 */
 	public function get_realistimo_field_map() {
+		return $this->get_effective_platform_field_map( 'realistimo', $this->get_realistimo_field_map_overrides() );
+	}
+
+	/**
+	 * @return array<string,string> [ xml_field => source_key ]
+	 */
+	public function get_realistimo_field_map_overrides() {
 		return $this->get_array_option( self::OPT_REALISTIMO_FIELD_MAP );
 	}
 
@@ -955,7 +1089,7 @@ class Settings {
 		if ( ! empty( $post['realistimo_field_map'] ) && is_array( $post['realistimo_field_map'] ) ) {
 			foreach ( $post['realistimo_field_map'] as $field => $source ) {
 				$field               = sanitize_text_field( wp_unslash( $field ) );
-				$source              = sanitize_text_field( wp_unslash( $source ) );
+				$source              = $this->normalize_platform_field_source( 'realistimo', $field, sanitize_text_field( wp_unslash( $source ) ) );
 				$field_map[ $field ] = $source;
 			}
 		}
@@ -1058,5 +1192,78 @@ class Settings {
 	private function get_array_option( $option_name ) {
 		$value = get_option( $option_name, array() );
 		return is_array( $value ) ? $value : array();
+	}
+
+	/**
+	 * Merge raw platform overrides with shared defaults.
+	 *
+	 * Rules:
+	 * - explicit platform source wins
+	 * - explicit __skip__ disables inheritance for that field
+	 * - missing or __inherit__ uses shared default when available
+	 *
+	 * @param string               $platform
+	 * @param array<string,string> $raw_map
+	 * @return array<string,string>
+	 */
+	private function get_effective_platform_field_map( $platform, array $raw_map ) {
+		$effective_map = $raw_map;
+		$shared_map    = $this->get_shared_field_map();
+		$shared_targets = $this->get_shared_targets_for_platform( $platform );
+
+		foreach ( $shared_targets as $platform_field => $shared_key ) {
+			$raw_source    = isset( $raw_map[ $platform_field ] ) ? sanitize_text_field( (string) $raw_map[ $platform_field ] ) : '';
+			$shared_source = isset( $shared_map[ $shared_key ] ) ? sanitize_text_field( (string) $shared_map[ $shared_key ] ) : '__skip__';
+
+			if ( '__skip__' === $raw_source ) {
+				$effective_map[ $platform_field ] = '__skip__';
+				continue;
+			}
+
+			if ( '' !== $raw_source && '__inherit__' !== $raw_source ) {
+				$effective_map[ $platform_field ] = $raw_source;
+				continue;
+			}
+
+			$effective_map[ $platform_field ] = ( '' !== $shared_source && '__skip__' !== $shared_source ) ? $shared_source : '__skip__';
+		}
+
+		return $effective_map;
+	}
+
+	/**
+	 * Collapse a submitted platform source back to inheritance when it matches
+	 * the configured shared default for the same conceptual field.
+	 *
+	 * @param string $platform
+	 * @param string $platform_field
+	 * @param string $source
+	 * @return string
+	 */
+	private function normalize_platform_field_source( $platform, $platform_field, $source ) {
+		$source = sanitize_text_field( (string) $source );
+
+		if ( '' === $source ) {
+			return '__skip__';
+		}
+
+		if ( '__skip__' === $source || '__inherit__' === $source ) {
+			return $source;
+		}
+
+		$shared_targets = $this->get_shared_targets_for_platform( $platform );
+		if ( empty( $shared_targets[ $platform_field ] ) ) {
+			return $source;
+		}
+
+		$shared_map    = $this->get_shared_field_map();
+		$shared_key    = $shared_targets[ $platform_field ];
+		$shared_source = isset( $shared_map[ $shared_key ] ) ? sanitize_text_field( (string) $shared_map[ $shared_key ] ) : '__skip__';
+
+		if ( '' !== $shared_source && '__skip__' !== $shared_source && $shared_source === $source ) {
+			return '__inherit__';
+		}
+
+		return $source;
 	}
 }

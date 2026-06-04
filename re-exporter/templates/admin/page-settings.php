@@ -95,6 +95,52 @@ $d = $this->get_settings_data();
 					</label>
 				</td>
 			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Shared Field Defaults', 're-exporter' ); ?></th>
+				<td>
+					<p class="description" style="margin-top:0;">
+						<?php esc_html_e( 'Configure common listing sources once. Supported platform fields inherit these defaults until a platform tab is saved with a different source or explicit skip.', 're-exporter' ); ?>
+					</p>
+					<table class="widefat re-field-map-table" style="max-width:960px;margin-top:12px;">
+						<thead>
+							<tr>
+								<th><?php esc_html_e( 'Shared field', 're-exporter' ); ?></th>
+								<th><?php esc_html_e( 'WordPress source', 're-exporter' ); ?></th>
+								<th><?php esc_html_e( 'Applies to', 're-exporter' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ( $d['shared_field_definitions'] as $shared_key => $shared_definition ) :
+								$shared_source  = isset( $d['shared_field_map'][ $shared_key ] ) ? $d['shared_field_map'][ $shared_key ] : '__skip__';
+								$shared_targets = array();
+								if ( ! empty( $shared_definition['targets'] ) && is_array( $shared_definition['targets'] ) ) {
+									foreach ( $shared_definition['targets'] as $shared_platform => $shared_platform_fields ) {
+										$shared_targets[] = strtoupper( $shared_platform ) . ': ' . implode( ', ', array_map( 'strval', (array) $shared_platform_fields ) );
+									}
+								}
+								?>
+								<tr>
+									<td>
+										<strong><?php echo esc_html( $shared_definition['label'] ); ?></strong>
+										<br /><code><?php echo esc_html( $shared_key ); ?></code>
+									</td>
+									<td>
+										<select name="re_shared_field_map[<?php echo esc_attr( $shared_key ); ?>]" class="re-source-select">
+											<option value="__skip__"<?php selected( $shared_source, '__skip__' ); ?>>
+												<?php esc_html_e( '— Skip —', 're-exporter' ); ?>
+											</option>
+											<?php echo re_exporter_source_options( $d['source_fields'], $shared_source, 'shared' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										</select>
+									</td>
+									<td style="color:#646970;font-size:12px;">
+										<?php echo esc_html( implode( ' | ', $shared_targets ) ); ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</td>
+			</tr>
 		</table>
 
 		<div class="re-action-bar">
@@ -1259,4 +1305,3 @@ function re_exporter_source_options( array $source_fields, $selected_key, $conte
 
 	return ob_get_clean();
 }
-

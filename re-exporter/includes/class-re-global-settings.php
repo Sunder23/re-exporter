@@ -62,6 +62,20 @@ class Global_Settings {
 	}
 
 	/**
+	 * @return array<string,array<string,mixed>>
+	 */
+	public function get_shared_field_definitions() {
+		return $this->settings->get_shared_field_definitions();
+	}
+
+	/**
+	 * @return array<string,string>
+	 */
+	public function get_shared_field_map() {
+		return $this->settings->get_shared_field_map();
+	}
+
+	/**
 	 * @param array $post
 	 * @return void
 	 */
